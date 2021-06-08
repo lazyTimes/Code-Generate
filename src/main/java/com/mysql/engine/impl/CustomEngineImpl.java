@@ -14,7 +14,7 @@ import java.util.Set;
  * author：      柯贤铭
  * createTime:   2020/1/17 9:18
  * description:  CustomEngineImpl 基于自定义拦截接口的方法调用
- *               基于org.reflections进行全量文件接口扫描
+ * 基于org.reflections进行全量文件接口扫描
  * version:      V1.0
  * ******************************
  */
@@ -23,7 +23,7 @@ public final class CustomEngineImpl {
     /***
      * 扫描全包获取 实现CustomEngine接口的类
      */
-    private static Set<Class<? extends CustomEngine>> toDos () {
+    private static Set<Class<? extends CustomEngine>> toDos() {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forPackage(""))
                 .filterInputsBy(input -> {
@@ -39,7 +39,7 @@ public final class CustomEngineImpl {
         for (Class<? extends CustomEngine> aClass : classes) {
 
             // 基于配置项检测是否需要启用自定义实现类
-            if("*;".equals(GlobleConfig.getGlobleConfig().getCustomHandleInclude()) ||
+            if ("*;".equals(GlobleConfig.getGlobleConfig().getCustomHandleInclude()) ||
                     GlobleConfig.getGlobleConfig().getCustomHandleIncludeMap().containsKey(aClass.getSimpleName())) {
                 try {
                     // 基于反射构建对象 - 调用handle方法

@@ -31,6 +31,11 @@ public class DBUtil {
         }
     }
 
+    /**
+     * TODO： 重构点： 支持多数据源
+     * @return
+     * @throws Exception
+     */
     private static Connection produceConnection() throws Exception {
         ConfigurationInfo config = GlobleConfig.getGlobleConfig();
         String url = String.format("jdbc:mysql://%s:%s/%s?characterEncoding=%s", config.getIp(), config.getPort(), config.getDataBase(), config.getEncoding());

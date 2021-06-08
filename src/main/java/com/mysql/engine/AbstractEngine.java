@@ -29,7 +29,7 @@ public abstract class AbstractEngine implements GeneralEngine {
     /***
      * 获取FreeMaker创建模板
      */
-    public static Configuration getConfiguration() {
+    public static Configuration getFreeMakerConfiguration() {
         if (configuration == null) {
             configuration = new Configuration(Configuration.VERSION_2_3_23);
             try {
@@ -46,6 +46,9 @@ public abstract class AbstractEngine implements GeneralEngine {
         return configuration;
     }
 
+    /**
+     * TODO 重构点2： 支持自定义选择生成那个模板
+     */
     @Override
     public void execute() {
         List<ClassInfo> classInfos = ClassInfoFactory.getClassInfoList();
@@ -58,9 +61,7 @@ public abstract class AbstractEngine implements GeneralEngine {
             genConfig();
             genFix();
         }
-
         logger.info(GlobleConfig.getGlobleConfig().getProjectName() + " Build Complete.");
-
         // 执行自定义拦截接口 执行
         logger.info("=== Begin To Execute Custom Module... ===");
         CustomEngineImpl.handleCustom();

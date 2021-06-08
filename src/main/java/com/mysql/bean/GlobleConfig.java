@@ -15,7 +15,7 @@ import java.io.IOException;
 public final class GlobleConfig {
 
     // 配置信息
-    private volatile static ConfigurationInfo CONFIGURATIONInfo = null;
+    private volatile static ConfigurationInfo CONFIGURATION_INFO = null;
 
     static {
         try {
@@ -30,11 +30,11 @@ public final class GlobleConfig {
      * 单例模式 双重锁校验
      */
     public static ConfigurationInfo getGlobleConfig() {
-        return CONFIGURATIONInfo;
+        return CONFIGURATION_INFO;
     }
 
     public static void setGlobleConfig(ConfigurationInfo CONFIGURATIONInfo) {
-        GlobleConfig.CONFIGURATIONInfo = CONFIGURATIONInfo;
+        GlobleConfig.CONFIGURATION_INFO = CONFIGURATIONInfo;
     }
 
     private GlobleConfig() {}

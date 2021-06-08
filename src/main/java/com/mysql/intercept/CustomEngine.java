@@ -44,7 +44,7 @@ public interface CustomEngine {
      */
     default void execute(Map<String, Object> params, String templateName, String filePath) throws IOException, TemplateException {
         // 获取模板构造器
-        Configuration configuration = AbstractEngine.getConfiguration();
+        Configuration configuration = AbstractEngine.getFreeMakerConfiguration();
 
         // 构建文件路径
         File file = new File(filePath);

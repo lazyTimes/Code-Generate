@@ -33,49 +33,39 @@ public class DataBaseUtil {
     public static ClassInfo parseClassInfo(String tableName) throws SQLException {
         // tableSql
         String tableInfoSql = getTableInfoSql(tableName);
-
         Statement statement = DBUtil.getConnection().createStatement();
-
         ResultSet tableResult = statement.executeQuery(tableInfoSql);
-
         // 构建ClassInfo信息
         ClassInfo classInfo = new ClassInfo();
         classInfo.setTableName(tableName);
-
         // className信息
         String className = StringUtil.upperCaseFirst(StringUtil.underlineToCamelCase(tableName));
         classInfo.setClassName(className);
         classInfo.setModelName(StringUtil.lowerCaseFirst(className));
         classInfo.setClassComment(className);
-
         List<FieldInfo> fieldList = new ArrayList<>();
-
         // 1 column_name, 2 data_type 3 column_comment
+        // TODO 面向MYSQL具体信息编程
         while (tableResult.next()) {
             FieldInfo fieldInfo = new FieldInfo();
             fieldInfo.setColumnName(tableResult.getString(1));
             fieldInfo.setFieldClass(typeMapping.get(tableResult.getString(2)));
-
             String fieldName = StringUtil.underlineToCamelCase(tableResult.getString(1));
             fieldInfo.setFieldName(fieldName);
             fieldInfo.setFieldComment(tableResult.getString(3));
-
             // 维护表结构字段 2 data_type,4 6 length, 7 nullAble
             fieldInfo.setDataType(tableResult.getString(2));
             fieldInfo.setMaxLength(StringUtils.isNotBlank(tableResult.getString(4)) ? tableResult.getString(4) : tableResult.getString(6));
             fieldInfo.setNullAble(tableResult.getString(7));
             fieldList.add(fieldInfo);
         }
-
         classInfo.setFieldList(fieldList);
-
         // 设置主键字段
         if (CollectionUtil.isEmpty(fieldList)) {
             classInfo.setKey(new FieldInfo());
         } else {
             classInfo.setKey(fieldList.get(0));
         }
-
         tableResult.close();
         statement.close();
         return classInfo;
@@ -87,14 +77,10 @@ public class DataBaseUtil {
     public static List<String> getAllTableNames () throws SQLException {
         // result
         List<String> result = new ArrayList<>();
-
         // sql
         String sql = getTables();
-
         Statement statement = DBUtil.getConnection().createStatement();
-
         ResultSet rs = statement.executeQuery(sql);
-
         while (rs.next()) {
             result.add(rs.getString(1));
         }
@@ -105,6 +91,7 @@ public class DataBaseUtil {
      * TableInfo SQL
      * @param tableName tableName
      */
+    // todo: mysql设置对应的数据库配置。由于不同的数据库属性可能不一样，需要区别对待
     private static String getTableInfoSql(String tableName) {
         return MessageFormat.format("select column_name,data_type,column_comment,numeric_precision," +
                 "numeric_scale,character_maximum_length,is_nullable nullable from information_schema.columns " +
@@ -114,6 +101,7 @@ public class DataBaseUtil {
     /***
      * 获取所有Tables SQL
      */
+    // todo: mysql设置对应的数据库配置。由于不同的数据库属性可能不一样，需要区别对待
     private static String getTables() {
         return MessageFormat.format("select table_name from information_schema.tables where table_schema=\"{0}\" and table_type=\"{1}\";",
                 GlobleConfig.getGlobleConfig().getDataBase(), "base table");
@@ -121,12 +109,15 @@ public class DataBaseUtil {
 
     private static Map<String, String> typeMapping = new HashMap<>();
 
+    // todo: mysql设置对应的数据库配置。由于不同的数据库属性可能不一样，需要区别对待
     static {
+        // ===================== mysql ===================== //
         typeMapping.put("int"       , "Integer");
         typeMapping.put("char"      , "String");
         typeMapping.put("varchar"   , "String");
         typeMapping.put("datetime"  , "Date");
-        typeMapping.put("timestamp" , "Date");
+        // 使用java.util.Timestamp 时间戳对象
+        typeMapping.put("timestamp" , "Timestamp");
         typeMapping.put("bit"       , "Integer");
         typeMapping.put("tinyint"   , "Integer");
         typeMapping.put("smallint"  , "Integer");
@@ -141,5 +132,6 @@ public class DataBaseUtil {
         typeMapping.put("mediumtext", "String");
         typeMapping.put("longtext"  , "String");
         typeMapping.put("time"      , "Date");
+        // ===================== mysql ===================== //
     }
 }

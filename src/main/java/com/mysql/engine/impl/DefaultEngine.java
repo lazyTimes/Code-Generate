@@ -35,7 +35,7 @@ public final class DefaultEngine extends AbstractEngine {
 
     public DefaultEngine() {
         config = GlobleConfig.getGlobleConfig();
-        configuration = AbstractEngine.getConfiguration();
+        configuration = AbstractEngine.getFreeMakerConfiguration();
     }
 
     /***
@@ -75,6 +75,7 @@ public final class DefaultEngine extends AbstractEngine {
             template.process(params, writer);
             writer.flush();
             writer.close();
+//            Files.write(Paths.get(URI.create(filePath)), file.get)
         } catch (IOException | TemplateException e) {
             e.printStackTrace();
         }
