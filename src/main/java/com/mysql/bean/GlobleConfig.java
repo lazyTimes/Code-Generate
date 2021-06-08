@@ -17,22 +17,19 @@ public final class GlobleConfig {
     // 配置信息
     private volatile static ConfigurationInfo CONFIGURATIONInfo = null;
 
+    static {
+        try {
+            PropertiesFactory.loadProperties();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /***
      * 获取全局配置
      * 单例模式 双重锁校验
      */
     public static ConfigurationInfo getGlobleConfig() {
-        if (null == CONFIGURATIONInfo) {
-            synchronized (GlobleConfig.class) {
-                if (null == CONFIGURATIONInfo) {
-                    try {
-                        PropertiesFactory.loadProperties();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
         return CONFIGURATIONInfo;
     }
 
