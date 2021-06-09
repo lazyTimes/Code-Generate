@@ -3,7 +3,6 @@ package com.mysql.engine.impl;
 import com.mysql.bean.ClassInfo;
 import com.mysql.bean.ConfigurationInfo;
 import com.mysql.bean.GlobleConfig;
-import com.mysql.config.SystemConfig;
 import com.mysql.engine.AbstractEngine;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -53,8 +52,8 @@ public final class DefaultEngine extends AbstractEngine {
         // 构建文件地址
         String path = config.getPackageName().replace(".", SPACER);
         // Example: F:\code\Demo\src\main\java\com\demo\controller\ScriptDirController.java
-        String filePath = config.getProjectPath() + SRC_MAIN_JAVA + path + SPACER
-                + parentPackage.replace(".", SPACER) + SPACER + classInfo.getClassName() + classSuffix;
+        String filePath = concat(config.getProjectPath(), SRC_MAIN_JAVA, path, SPACER
+                , parentPackage.replace(".", SPACER), SPACER, classInfo.getClassName(), classSuffix);
         logger.info("文件地址:{}", filePath);
         processTemplate(classInfo, templateName, filePath);
     }
@@ -90,33 +89,33 @@ public final class DefaultEngine extends AbstractEngine {
         // 生成固定文件 ApiResult,PageList,ResultCode
         ClassInfo apiResult = new ClassInfo();
         apiResult.setClassName("ApiResult");
-        genClass(apiResult, concat(CODE_GENERATE_FILE_PREFIX, SPACER, OTHER_FILE_PREFIX, SPACER, API_RESULT), OTHER_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
+        genClass(apiResult, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, API_RESULT), COMMON_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
         ClassInfo pageList = new ClassInfo();
         pageList.setClassName("PageList");
-        genClass(pageList, concat(CODE_GENERATE_FILE_PREFIX, SPACER, OTHER_FILE_PREFIX, SPACER, PAGE_LIST), OTHER_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
+        genClass(pageList, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, PAGE_LIST), COMMON_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
         ClassInfo resultCode = new ClassInfo();
         resultCode.setClassName("ResultCode");
-        genClass(resultCode, concat(CODE_GENERATE_FILE_PREFIX, SPACER, OTHER_FILE_PREFIX, SPACER, RESULT_CODE), OTHER_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
+        genClass(resultCode, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, RESULT_CODE), COMMON_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
         // Application.class
         ClassInfo application = new ClassInfo();
         application.setClassName("Application");
-        genClass(application, concat(CODE_GENERATE_FILE_PREFIX, SPACER, OTHER_FILE_PREFIX, SPACER, APPLICATION), "", GENERATE_JAVA_FILE_SUFFIX);
+        genClass(application, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, APPLICATION), "", GENERATE_JAVA_FILE_SUFFIX);
     }
 
     @Override
     public void genController(ClassInfo classInfo) {
-        genClass(classInfo, "code-generator/mybatis/controller.ftl", "web", "Controller.java");
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, CONTROLLER), "controller", concat("Controller", GENERATE_JAVA_FILE_SUFFIX));
     }
 
     @Override
     public void genService(ClassInfo classInfo) {
-        genClass(classInfo, "code-generator/mybatis/service.ftl", "service", "Service.java");
-        genClass(classInfo, "code-generator/mybatis/service_impl.ftl", "service.impl", "ServiceImpl.java");
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, SERVICE), "service", concat("Service", GENERATE_JAVA_FILE_SUFFIX));
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, SERVICE_IMPL), "service.impl", concat("ServiceImpl", GENERATE_JAVA_FILE_SUFFIX));
     }
 
     @Override
     public void genRepositoryClass(ClassInfo classInfo) {
-        genClass(classInfo, "code-generator/mybatis/mapper.ftl", "dao", "Dao.java");
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MAPPER), "mapper", concat("Mapper", GENERATE_JAVA_FILE_SUFFIX));
     }
 
     @Override
@@ -126,30 +125,30 @@ public final class DefaultEngine extends AbstractEngine {
         // Example: C:\Users\Administrator\Desktop\Codes\KerwinBoots\src\main\resources\mapper\ScriptDirMapper.xml
         String filePath = rootPath + SRC_MAIN_RESOURCE + SPACER + "mapper" + SPACER
                 + classInfo.getClassName() + "Mapper.xml";
-        processTemplate(classInfo, "code-generator/mybatis/mapper_xml.ftl", filePath);
+        processTemplate(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MAPPER_IMPL), filePath);
     }
 
     @Override
     public void genEntity(ClassInfo classInfo) {
-        genClass(classInfo, "code-generator/mybatis/model.ftl", "entity", GENERATE_JAVA_FILE_SUFFIX);
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MODEL), "entity", GENERATE_JAVA_FILE_SUFFIX);
     }
 
     @Override
     public void genConfig() {
         // 构建文件地址
-        String rootPath = config.getRootPath() + File.separator + config.getProjectName();
+        String rootPath = concat(config.getRootPath(), File.separator, config.getProjectName());
         // POM依赖
         ClassInfo pom = new ClassInfo();
         pom.setClassName("pom");
-        processTemplate(pom, "code-generator/common/pom.ftl", rootPath + SPACER + pom.getClassName() + ".xml");
+        processTemplate(pom, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, POM), concat(rootPath, SPACER, pom.getClassName(), ".xml"));
         // logback日志
         ClassInfo log = new ClassInfo();
         log.setClassName("logback-spring");
-        processTemplate(log, "code-generator/common/logback-spring.ftl", rootPath + SRC_MAIN_RESOURCE + log.getClassName() + ".xml");
+        processTemplate(log, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, LOGBACK_SPRING), concat(rootPath, SRC_MAIN_RESOURCE, log.getClassName(), ".xml"));
         // 配置文件
         ClassInfo properties = new ClassInfo();
         properties.setClassName("application");
-        processTemplate(properties, "code-generator/common/applicationConfig.ftl", rootPath + SRC_MAIN_RESOURCE + properties.getClassName() + ".properties");
+        processTemplate(properties, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, APPLICATION_CONFIG), concat(rootPath, SRC_MAIN_RESOURCE, properties.getClassName(), ".properties"));
     }
 
 

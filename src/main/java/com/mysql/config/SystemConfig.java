@@ -10,27 +10,26 @@ import java.io.File;
  * @Create on : 2021/6/8 15:46
  **/
 public final class SystemConfig {
-    // 系统空格
+    /**系统空格 */
     public static final String SPACER = File.separator;
-    // 系统配置文件
+    /**系统配置文件 */
     public static final String APPLICATION_PROPERTIES_FILE = "application.properties";
-    /// 生成具体文件的JAVA文件后缀名
+    /** 生成具体文件的JAVA文件后缀名 */
     public static final String GENERATE_JAVA_FILE_SUFFIX = ".java";
-    // 模板文件存放地址的通用前缀
+    /** 模板文件存放地址的通用前缀 */
     public static final String CODE_GENERATE_FILE_PREFIX = "code-generator";
-    // layui 文件地址前缀
+    /** layui 文件地址前缀 */
     public static final String LAYUI_HTML_FILE_PREFIX = "layui-html";
-    // markdown 文件地址前缀
+     /** markdown 文件地址前缀 */
     public static final String MARK_DOWN_FILE_PREFIX = "markdown-file";
-    // 后端文件模板 文件地址前缀
+     /** 后端文件模板 文件地址前缀 */
     public static final String BACK_FILE_PREFIX = "mybatis";
-    // 其他项目必须文件 文件地址前缀
-    public static final String OTHER_FILE_PREFIX = "common";
-    // JAVA地址
+    /** 其他项目必须文件 文件地址前缀 */
+    public static final String COMMON_FILE_PREFIX = "common";
+    /**  JAVA地址 */
     public static final String SRC_MAIN_JAVA = SPACER + "src" + SPACER + "main" + SPACER + "java" + SPACER;
-    // RESOURCE地址
+     /**  RESOURCE地址 */
     public static final String SRC_MAIN_RESOURCE = SPACER + "src" + SPACER + "main" + SPACER + "resources" + SPACER;
-
 
     /**
      * freemarker 模板文件名称配置
