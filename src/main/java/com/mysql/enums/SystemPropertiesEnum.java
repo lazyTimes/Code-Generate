@@ -10,6 +10,7 @@ package com.mysql.enums;
 public enum SystemPropertiesEnum {
     DRIVER("driver", "com.mysql.jdbc.Driver"),
     IP("ip", "root"),
+    DATABASE_NAME("databaseName", "mysql"),
     PORT("port", "3306"),
     ENCODING("encoding", "UTF-8"),
     LOGIN_NAME("loginName", "root"),

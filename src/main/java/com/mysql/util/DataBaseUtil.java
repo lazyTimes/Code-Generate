@@ -4,6 +4,8 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.mysql.bean.ClassInfo;
 import com.mysql.bean.FieldInfo;
 import com.mysql.bean.GlobleConfig;
+import com.mysql.strategy.DbGenerateAble;
+import com.mysql.strategy.PostgreSqlDbGenerate;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.ResultSet;
@@ -26,6 +28,8 @@ import java.util.Map;
  */
 public class DataBaseUtil {
 
+    private static final DbGenerateAble DB_GENERATE_ABLE = new PostgreSqlDbGenerate();
+
     /***
      * 根据指定库获取单表相关参数
      * @param tableName   表名
@@ -46,6 +50,44 @@ public class DataBaseUtil {
         List<FieldInfo> fieldList = new ArrayList<>();
         // 1 column_name, 2 data_type 3 column_comment
         // TODO 面向MYSQL具体信息编程
+        // 暂时改为使用 postgresql 数据库处理
+        processPostgreSqlTableInfo(tableResult, fieldList);
+        classInfo.setFieldList(fieldList);
+        // 设置主键字段
+        if (CollectionUtil.isEmpty(fieldList)) {
+            classInfo.setKey(new FieldInfo());
+        } else {
+            classInfo.setKey(fieldList.get(0));
+        }
+        tableResult.close();
+        statement.close();
+        return classInfo;
+    }
+
+    private static void processPostgreSqlTableInfo(ResultSet tableResult, List<FieldInfo> fieldList) throws SQLException {
+        while (tableResult.next()) {
+            FieldInfo fieldInfo = new FieldInfo();
+            fieldInfo.setColumnName(tableResult.getString(1));
+            fieldInfo.setFieldClass(typeMapping.get(tableResult.getString(2)));
+            String fieldName = StringUtil.underlineToCamelCase(tableResult.getString(1));
+            fieldInfo.setFieldName(fieldName);
+            fieldInfo.setFieldComment(tableResult.getString(3));
+            // 维护表结构字段 2 data_type,4 6 length, 5 nullAble
+            fieldInfo.setDataType(tableResult.getString(2));
+            // postgresql 如果没有长度类型，则默认为0
+            fieldInfo.setMaxLength(StringUtils.isNotBlank(tableResult.getString(4)) ? tableResult.getString(4) : "0");
+            fieldInfo.setNullAble(tableResult.getString(5));
+            fieldList.add(fieldInfo);
+        }
+    }
+
+    /**
+     * 处理mysql数据库查询字段信息
+     * @param tableResult
+     * @param fieldList
+     * @throws SQLException
+     */
+    private static void processMysqlTableInfo(ResultSet tableResult, List<FieldInfo> fieldList) throws SQLException {
         while (tableResult.next()) {
             FieldInfo fieldInfo = new FieldInfo();
             fieldInfo.setColumnName(tableResult.getString(1));
@@ -59,16 +101,6 @@ public class DataBaseUtil {
             fieldInfo.setNullAble(tableResult.getString(7));
             fieldList.add(fieldInfo);
         }
-        classInfo.setFieldList(fieldList);
-        // 设置主键字段
-        if (CollectionUtil.isEmpty(fieldList)) {
-            classInfo.setKey(new FieldInfo());
-        } else {
-            classInfo.setKey(fieldList.get(0));
-        }
-        tableResult.close();
-        statement.close();
-        return classInfo;
     }
 
     /***
@@ -93,9 +125,10 @@ public class DataBaseUtil {
      */
     // todo: mysql设置对应的数据库配置。由于不同的数据库属性可能不一样，需要区别对待
     private static String getTableInfoSql(String tableName) {
-        return MessageFormat.format("select column_name,data_type,column_comment,numeric_precision," +
-                "numeric_scale,character_maximum_length,is_nullable nullable from information_schema.columns " +
-                "where table_name = \"{0}\" and table_schema = \"{1}\"", tableName, GlobleConfig.getGlobleConfig().getDataBase());
+        return DB_GENERATE_ABLE.genAllTableInfoSql(tableName);
+//        return MessageFormat.format("select column_name,data_type,column_comment,numeric_precision," +
+//                "numeric_scale,character_maximum_length,is_nullable nullable from information_schema.columns " +
+//                "where table_name = \"{0}\" and table_schema = \"{1}\"", tableName, GlobleConfig.getGlobleConfig().getDataBase());
     }
 
     /***
@@ -103,8 +136,9 @@ public class DataBaseUtil {
      */
     // todo: mysql设置对应的数据库配置。由于不同的数据库属性可能不一样，需要区别对待
     private static String getTables() {
-        return MessageFormat.format("select table_name from information_schema.tables where table_schema=\"{0}\" and table_type=\"{1}\";",
-                GlobleConfig.getGlobleConfig().getDataBase(), "base table");
+        return DB_GENERATE_ABLE.genAllTables();
+//        return MessageFormat.format("select table_name from information_schema.tables where table_schema=\"{0}\" and table_type=\"{1}\";",
+//                GlobleConfig.getGlobleConfig().getDataBase(), "base table");
     }
 
     private static Map<String, String> typeMapping = new HashMap<>();

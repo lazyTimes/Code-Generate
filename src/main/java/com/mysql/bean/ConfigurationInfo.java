@@ -21,6 +21,11 @@ public class ConfigurationInfo {
     private String ip;
 
     /**
+     * 当前使用数据库
+     */
+    private String databaseName;
+
+    /**
      * port
      */
     private String port;
