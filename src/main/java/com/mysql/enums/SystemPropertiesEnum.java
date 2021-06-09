@@ -10,7 +10,8 @@ package com.mysql.enums;
 public enum SystemPropertiesEnum {
     DRIVER("driver", "com.mysql.jdbc.Driver"),
     IP("ip", "root"),
-    DATABASE_NAME("databaseName", "mysql"),
+    // 默认数据库类型为mysql
+    DATABASE_NAME("dataBaseType", "mysql"),
     PORT("port", "3306"),
     ENCODING("encoding", "UTF-8"),
     LOGIN_NAME("loginName", "root"),

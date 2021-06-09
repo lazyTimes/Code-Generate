@@ -23,7 +23,7 @@ public class ConfigurationInfo {
     /**
      * 当前使用数据库
      */
-    private String databaseName;
+    private String dataBaseType;
 
     /**
      * port

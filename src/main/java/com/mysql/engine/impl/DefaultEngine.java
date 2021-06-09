@@ -3,6 +3,7 @@ package com.mysql.engine.impl;
 import com.mysql.bean.ClassInfo;
 import com.mysql.bean.ConfigurationInfo;
 import com.mysql.bean.GlobleConfig;
+import com.mysql.config.SystemConfig;
 import com.mysql.engine.AbstractEngine;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -17,6 +18,10 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.mysql.config.SystemConfig.*;
+import static com.mysql.config.SystemConfig.FreeMarkerFtlFileConfig.*;
+import static com.mysql.util.FormatUtil.concat;
+
 /**
  * ******************************
  * author：      柯贤铭
@@ -27,7 +32,7 @@ import java.util.Map;
  */
 public final class DefaultEngine extends AbstractEngine {
 
-    private static final String SPACER = File.separator;
+    private static Logger logger = LoggerFactory.getLogger(DefaultEngine.class);
 
     private ConfigurationInfo config;
 
@@ -51,7 +56,7 @@ public final class DefaultEngine extends AbstractEngine {
         String filePath = config.getProjectPath() + SRC_MAIN_JAVA + path + SPACER
                 + parentPackage.replace(".", SPACER) + SPACER + classInfo.getClassName() + classSuffix;
         logger.info("文件地址:{}", filePath);
-        process(classInfo, templateName, filePath);
+        processTemplate(classInfo, templateName, filePath);
     }
 
     /***
@@ -60,7 +65,7 @@ public final class DefaultEngine extends AbstractEngine {
      * @param templateName
      * @param filePath
      */
-    private void process(ClassInfo classInfo, String templateName, String filePath) {
+    private void processTemplate(ClassInfo classInfo, String templateName, String filePath) {
         try {
             File file = new File(filePath);
             file.getParentFile().mkdirs();
@@ -75,7 +80,6 @@ public final class DefaultEngine extends AbstractEngine {
             template.process(params, writer);
             writer.flush();
             writer.close();
-//            Files.write(Paths.get(URI.create(filePath)), file.get)
         } catch (IOException | TemplateException e) {
             e.printStackTrace();
         }
@@ -86,17 +90,17 @@ public final class DefaultEngine extends AbstractEngine {
         // 生成固定文件 ApiResult,PageList,ResultCode
         ClassInfo apiResult = new ClassInfo();
         apiResult.setClassName("ApiResult");
-        genClass(apiResult, "code-generator/common/ApiResult.ftl", "common", ".java");
+        genClass(apiResult, concat(CODE_GENERATE_FILE_PREFIX, SPACER, OTHER_FILE_PREFIX, SPACER, API_RESULT), OTHER_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
         ClassInfo pageList = new ClassInfo();
         pageList.setClassName("PageList");
-        genClass(pageList, "code-generator/common/PageList.ftl", "common", ".java");
+        genClass(pageList, concat(CODE_GENERATE_FILE_PREFIX, SPACER, OTHER_FILE_PREFIX, SPACER, PAGE_LIST), OTHER_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
         ClassInfo resultCode = new ClassInfo();
         resultCode.setClassName("ResultCode");
-        genClass(resultCode, "code-generator/common/ResultCode.ftl", "common", ".java");
+        genClass(resultCode, concat(CODE_GENERATE_FILE_PREFIX, SPACER, OTHER_FILE_PREFIX, SPACER, RESULT_CODE), OTHER_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
         // Application.class
         ClassInfo application = new ClassInfo();
         application.setClassName("Application");
-        genClass(application, "code-generator/common/Application.ftl", "", ".java");
+        genClass(application, concat(CODE_GENERATE_FILE_PREFIX, SPACER, OTHER_FILE_PREFIX, SPACER, APPLICATION), "", GENERATE_JAVA_FILE_SUFFIX);
     }
 
     @Override
@@ -122,12 +126,12 @@ public final class DefaultEngine extends AbstractEngine {
         // Example: C:\Users\Administrator\Desktop\Codes\KerwinBoots\src\main\resources\mapper\ScriptDirMapper.xml
         String filePath = rootPath + SRC_MAIN_RESOURCE + SPACER + "mapper" + SPACER
                 + classInfo.getClassName() + "Mapper.xml";
-        process(classInfo, "code-generator/mybatis/mapper_xml.ftl", filePath);
+        processTemplate(classInfo, "code-generator/mybatis/mapper_xml.ftl", filePath);
     }
 
     @Override
     public void genEntity(ClassInfo classInfo) {
-        genClass(classInfo, "code-generator/mybatis/model.ftl", "entity", ".java");
+        genClass(classInfo, "code-generator/mybatis/model.ftl", "entity", GENERATE_JAVA_FILE_SUFFIX);
     }
 
     @Override
@@ -137,22 +141,16 @@ public final class DefaultEngine extends AbstractEngine {
         // POM依赖
         ClassInfo pom = new ClassInfo();
         pom.setClassName("pom");
-        process(pom, "code-generator/common/pom.ftl", rootPath + POM + pom.getClassName() + ".xml");
+        processTemplate(pom, "code-generator/common/pom.ftl", rootPath + SPACER + pom.getClassName() + ".xml");
         // logback日志
         ClassInfo log = new ClassInfo();
         log.setClassName("logback-spring");
-        process(log, "code-generator/common/logback-spring.ftl", rootPath + SRC_MAIN_RESOURCE + log.getClassName() + ".xml");
+        processTemplate(log, "code-generator/common/logback-spring.ftl", rootPath + SRC_MAIN_RESOURCE + log.getClassName() + ".xml");
         // 配置文件
         ClassInfo properties = new ClassInfo();
         properties.setClassName("application");
-        process(properties, "code-generator/common/applicationCongih.ftl", rootPath + SRC_MAIN_RESOURCE + properties.getClassName() + ".properties");
+        processTemplate(properties, "code-generator/common/applicationConfig.ftl", rootPath + SRC_MAIN_RESOURCE + properties.getClassName() + ".properties");
     }
 
-    private static final String SRC_MAIN_JAVA = SPACER + "src" + SPACER + "main" + SPACER + "java" + SPACER;
 
-    private static final String SRC_MAIN_RESOURCE = SPACER + "src" + SPACER + "main" + SPACER + "resources" + SPACER;
-
-    private static final String POM = SPACER;
-
-    private static Logger logger = LoggerFactory.getLogger(DefaultEngine.class);
 }
