@@ -5,7 +5,7 @@ import com.generate.bean.ClassInfo;
 import com.generate.bean.FieldInfo;
 import com.generate.strategy.sqlgen.DbGenerateAble;
 import com.generate.strategy.sqlgen.PostgreSqlDbGenerate;
-import com.generate.typeconvert.PostgretTypeConvert;
+import com.generate.typeconvert.DbTypeConvertBean;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.ResultSet;
@@ -65,7 +65,7 @@ public class DataBaseUtil {
         while (tableResult.next()) {
             FieldInfo fieldInfo = new FieldInfo();
             fieldInfo.setColumnName(tableResult.getString(1));
-            fieldInfo.setFieldClass(PostgretTypeConvert.getMysqlTypeMapping().get(tableResult.getString(2)));
+            fieldInfo.setFieldClass(new DbTypeConvertBean().getMysqlTypeMapping().get(tableResult.getString(2)));
             String fieldName = StringUtil.underlineToCamelCaseAndReplaceDbFieldName(tableResult.getString(1));
             fieldInfo.setFieldName(fieldName);
             fieldInfo.setFieldComment(tableResult.getString(3));
@@ -89,7 +89,7 @@ public class DataBaseUtil {
         while (tableResult.next()) {
             FieldInfo fieldInfo = new FieldInfo();
             fieldInfo.setColumnName(tableResult.getString(1));
-            fieldInfo.setFieldClass(PostgretTypeConvert.getMysqlTypeMapping().get(tableResult.getString(2)));
+            fieldInfo.setFieldClass(new DbTypeConvertBean().getMysqlTypeMapping().get(tableResult.getString(2)));
             String fieldName = StringUtil.underlineToCamelCaseAndReplaceDbFieldName(tableResult.getString(1));
             fieldInfo.setFieldName(fieldName);
             fieldInfo.setFieldComment(tableResult.getString(3));
