@@ -1,5 +1,6 @@
 package com.generate.util;
 
+import com.generate.enums.DbEnum;
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -35,6 +36,15 @@ public class StringUtil {
     }
 
     /**
+     * 下划线转为驼峰式的的同时，将根据指定数据库
+     * @param fieldName
+     * @return
+     */
+    public static String underlineToCamelCaseAndReplaceDbFieldName( String fieldName) {
+        return DbCheckUtils.containsKeyWordNameAndConcat(underlineToCamelCase(fieldName), "Key");
+    }
+
+    /**
      * 下划线，转换为驼峰式
      *
      * @param fieldName
@@ -61,7 +71,7 @@ public class StringUtil {
         }
         // 返回值
         String key = result.toString();
-        if (DataBaseUtils.containsMysqlKeyWord(key)){
+        if (DbCheckUtils.containsMysqlKeyWord(key)){
             return key + "Key";
         }
         return key;
