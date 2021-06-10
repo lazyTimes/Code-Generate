@@ -1,7 +1,8 @@
 package com.mysql.engine.impl;
 
-import com.mysql.bean.ClassInfo;
-import com.mysql.factory.ClassInfoFactory;
+import com.generate.bean.ClassInfo;
+import com.generate.engine.impl.DefaultEngine;
+import com.generate.factory.ClassInfoFactory;
 import org.junit.Before;
 import org.junit.Test;
 

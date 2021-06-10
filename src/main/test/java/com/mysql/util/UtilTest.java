@@ -1,7 +1,8 @@
 package com.mysql.util;
 
-import com.mysql.factory.ClassInfoFactory;
-import com.mysql.factory.PropertiesFactory;
+import com.generate.factory.ClassInfoFactory;
+import com.generate.factory.PropertiesFactory;
+import com.generate.util.DBUtil;
 import org.junit.Before;
 import org.junit.Test;
 
