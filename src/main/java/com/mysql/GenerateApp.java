@@ -10,7 +10,7 @@ import com.mysql.engine.AbstractEngine;
  * version:      V1.0
  * ******************************
  */
-public class App {
+public class GenerateApp {
 
     /***
      * 执行 - 构建项目
