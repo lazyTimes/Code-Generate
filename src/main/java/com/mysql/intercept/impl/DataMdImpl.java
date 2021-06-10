@@ -13,9 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mysql.config.SystemConfig.CODE_GENERATE_FILE_PREFIX;
+import static com.mysql.config.SystemConfig.*;
 import static com.mysql.config.SystemConfig.FreeMarkerFtlFileConfig.MARK_DOWN;
-import static com.mysql.config.SystemConfig.MARK_DOWN_FILE_PREFIX;
 import static com.mysql.util.FormatUtil.concat;
 
 /**
@@ -45,8 +44,6 @@ public class DataMdImpl implements CustomEngine {
 
         logger.info("=== Data Sql Md Part Build Complete.=== ");
     }
-
-    private static final String SPACER = File.separator;
 
     private static final String SRC_MAIN_RESOURCE = concat(SPACER, "src", SPACER, "main", SPACER, "resources" + SPACER);
 

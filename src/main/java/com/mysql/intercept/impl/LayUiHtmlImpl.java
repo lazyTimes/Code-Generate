@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.mysql.config.SystemConfig.SPACER;
+
 /**
  * ******************************
  * author：      柯贤铭
@@ -93,8 +95,6 @@ public class LayUiHtmlImpl implements CustomEngine {
             e.printStackTrace();
         }
     }
-
-    private static final String SPACER = File.separator;
 
     private static final String SRC_MAIN_RESOURCE = SPACER + "src" + SPACER + "main" + SPACER + "resources" + SPACER;
 

@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import static com.mysql.config.SystemConfig.SPACER;
+
 /**
  * ******************************
  * author：      柯贤铭
@@ -55,7 +57,7 @@ public class PropertiesFactory {
      * @throws IOException
      */
     private static void loadSystemConfig() throws IOException {
-        String filePath = System.getProperty("user.dir") + File.separator + SystemConfig.APPLICATION_PROPERTIES_FILE;
+        String filePath = System.getProperty("user.dir") + SPACER + SystemConfig.APPLICATION_PROPERTIES_FILE;
         InputStream inStream;
         if (new File(filePath).exists()) {
             inStream = new FileInputStream(filePath);
@@ -71,7 +73,7 @@ public class PropertiesFactory {
         configurationInfo.setIncludeMap(parseInclude(configurationInfo.getInclude()));
         configurationInfo.setCustomHandleIncludeMap(parseInclude(configurationInfo.getCustomHandleInclude()));
         // 解析项目目录地址
-        String projectPath = configurationInfo.getRootPath() + File.separator + configurationInfo.getProjectName();
+        String projectPath = configurationInfo.getRootPath() + SPACER + configurationInfo.getProjectName();
         configurationInfo.setProjectPath(projectPath);
         // 共有环境变量设置参数
         GlobleConfig.setGlobleConfig(configurationInfo);

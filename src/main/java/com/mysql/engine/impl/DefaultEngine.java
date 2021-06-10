@@ -121,7 +121,7 @@ public final class DefaultEngine extends AbstractEngine {
     @Override
     public void genRepositoryXml(ClassInfo classInfo) {
         // 构建文件地址
-        String rootPath = config.getRootPath() + File.separator + config.getProjectName();
+        String rootPath = config.getRootPath() + SPACER + config.getProjectName();
         // Example: C:\Users\Administrator\Desktop\Codes\KerwinBoots\src\main\resources\mapper\ScriptDirMapper.xml
         String filePath = rootPath + SRC_MAIN_RESOURCE + SPACER + "mapper" + SPACER
                 + classInfo.getClassName() + "Mapper.xml";
@@ -136,7 +136,7 @@ public final class DefaultEngine extends AbstractEngine {
     @Override
     public void genConfig() {
         // 构建文件地址
-        String rootPath = concat(config.getRootPath(), File.separator, config.getProjectName());
+        String rootPath = concat(config.getRootPath(), SPACER, config.getProjectName());
         // POM依赖
         ClassInfo pom = new ClassInfo();
         pom.setClassName("pom");

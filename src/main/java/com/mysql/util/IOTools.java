@@ -24,8 +24,6 @@ public class IOTools {
 
     private IOTools() {}
 
-    private final static String fileSeperator  = File.separator;
-
     public static void readLine(BufferedReader br, Consumer<String> handle, boolean close) {
         String s;
         try {

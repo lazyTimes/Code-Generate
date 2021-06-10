@@ -38,7 +38,7 @@ public abstract class AbstractEngine implements GeneralEngine {
         if (configuration == null) {
             configuration = new Configuration(Configuration.VERSION_2_3_23);
             try {
-                configuration.setTemplateLoader(new ClassTemplateLoader(AbstractEngine.class,"/templates/"));
+                configuration.setTemplateLoader(new ClassTemplateLoader(AbstractEngine.class,"/"));
                 configuration.setNumberFormat("#");
                 configuration.setClassicCompatible(true);
                 configuration.setDefaultEncoding("UTF-8");
