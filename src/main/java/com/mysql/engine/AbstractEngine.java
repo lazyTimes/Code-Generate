@@ -5,9 +5,14 @@ import com.mysql.bean.GlobleConfig;
 import com.mysql.engine.impl.CustomEngineImpl;
 import com.mysql.engine.impl.DefaultEngine;
 import com.mysql.factory.ClassInfoFactory;
+import com.mysql.factory.PropertiesFactory;
 import freemarker.cache.ClassTemplateLoader;
+import freemarker.ext.beans.BeansWrapper;
+import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
+import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +43,10 @@ public abstract class AbstractEngine implements GeneralEngine {
                 configuration.setClassicCompatible(true);
                 configuration.setDefaultEncoding("UTF-8");
                 configuration.setLocale(Locale.CHINA);
+                configuration.setAPIBuiltinEnabled(true);
             } catch (Exception e) {
                 e.printStackTrace();
+                throw e;
             }
             configuration.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
         }

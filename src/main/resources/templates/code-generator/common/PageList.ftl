@@ -1,6 +1,5 @@
 package ${packageName}.common;
 
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
  * @author ${authorName}
  * @date ${.now?string('yyyy/MM/dd')}
  */
-@Data
 public class PageList<T extends Serializable> {
 
     /**
@@ -38,4 +36,45 @@ public class PageList<T extends Serializable> {
      * 对象集合
      */
     private List<T> list;
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public int getTotalPageCount() {
+        return totalPageCount;
+    }
+
+    public void setTotalPageCount(int totalPageCount) {
+        this.totalPageCount = totalPageCount;
+    }
+
+    public int getStartPageNo() {
+        return startPageNo;
+    }
+
+    public void setStartPageNo(int startPageNo) {
+        this.startPageNo = startPageNo;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public List<T> getList() {
+        return list;
+    }
+
+    public void setList(List<T> list) {
+        this.list = list;
+    }
+
 }

@@ -91,7 +91,7 @@ public class PropertiesFactory {
 
     /**
      * 读取配置文件或者读取默认的成员属性键值对配置
-     *
+     * @deprecated 这种写法不利于维护配置，改为由枚举进行匹配和配置
      * @throws IOException
      */
     private static void loadBySystemConfig(Properties prop, JSONObject json) throws IOException {

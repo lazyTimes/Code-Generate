@@ -36,9 +36,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
             <#list classInfo.fieldList as fieldItem >
-            ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
-                ${r"#{"}${fieldItem.fieldName}${r"}"}<#if fieldItem_has_next>,</#if>
-            ${r"</if>"}
+                    ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
+                    ${r"#{"}${fieldItem.fieldName}${r"}"}<#if fieldItem_has_next>,</#if>
+                    ${r"</if>"}
             </#list>
             </#if>
         </trim>
@@ -72,7 +72,7 @@
     </update>
 
     <!-- 删除 -->
-    <delete id="delete">
+    <delete id="deleteById">
         DELETE FROM ${classInfo.tableName}
         WHERE `${classInfo.key.columnName}` = ${r"#{"}key${r"}"}
     </delete>
@@ -99,9 +99,19 @@
         <where>
             <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
             <#list classInfo.fieldList as fieldItem >
-            ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
-                and `${fieldItem.columnName}` = ${r"#{"}${fieldItem.fieldName}${r"}"}
-            ${r"</if>"}
+                <#if fieldItem.fieldClass=="String">
+                    ${r"<if test ='null != "}${fieldItem.fieldName}${r" and '' != "}${fieldItem.fieldName}${r"'>"}
+                    and `${fieldItem.columnName}` = ${r"#{"}${fieldItem.fieldName}${r"}"}
+                    ${r"</if>"}
+                <#elseif fieldItem.fieldClass=="Date" || fieldItem.fieldClass=="Timestamp">
+                    ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
+                    and ${r"#{"}${fieldItem.fieldName}${r"}"} &lt; `${fieldItem.columnName}` &gt;= ${r"#{"}${fieldItem.fieldName}${r"}"}
+                    ${r"</if>"}
+                <#else >
+                    ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
+                    and `${fieldItem.columnName}` = ${r"#{"}${fieldItem.fieldName}${r"}"}
+                    ${r"</if>"}
+                </#if>
             </#list>
             </#if>
         </where>
