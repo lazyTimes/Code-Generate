@@ -3,8 +3,8 @@ package com.generate.util;
 import cn.hutool.core.collection.CollectionUtil;
 import com.generate.bean.ClassInfo;
 import com.generate.bean.FieldInfo;
-import com.generate.strategy.DbGenerateAble;
-import com.generate.strategy.PostgreSqlDbGenerate;
+import com.generate.strategy.sqlgen.DbGenerateAble;
+import com.generate.strategy.sqlgen.PostgreSqlDbGenerate;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.ResultSet;

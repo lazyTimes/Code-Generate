@@ -1,4 +1,4 @@
-package com.generate.strategy;
+package com.generate.strategy.sqlgen;
 
 /**
  * @author zhaoxudong

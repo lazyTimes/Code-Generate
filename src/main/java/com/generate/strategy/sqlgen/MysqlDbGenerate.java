@@ -1,4 +1,4 @@
-package com.generate.strategy;
+package com.generate.strategy.sqlgen;
 
 import com.generate.bean.GlobleConfig;
 
@@ -12,6 +12,7 @@ import java.text.MessageFormat;
  * @Create on : 2021/6/9 10:18
  **/
 public class MysqlDbGenerate implements DbGenerateAble {
+
     @Override
     public String genAllTableInfoSql(String... params) {
         return MessageFormat.format("select column_name,data_type,column_comment,numeric_precision," +
