@@ -28,20 +28,6 @@ import java.util.Properties;
 public class PropertiesFactory {
 
     /***
-     * 配置文件KEYS
-     * @deprecated 改动，废弃该写法
-     */
-    private static final String[] KEYS = {"ip", "port", "driver", "dataBase", "encoding", "loginName", "passWord"
-            , "include", "projectName", "packageName", "authorName", "rootPath", "customHandleInclude"};
-
-    /***
-     * 配置文件默认Values
-     * @deprecated 改动，废弃该写法
-     */
-    private static final String[] VALUES = {"127.0.0.1", "3306", "com.mysql.jdbc.Driver", "db_file", "UTF-8", "root", ""
-            , "*", "Demo", "com.demo", "Kerwin", "F:\\code", "*"};
-
-    /***
      * 加载全局配置
      * @throws IOException 默认抛出IO异常
      */
@@ -86,17 +72,6 @@ public class PropertiesFactory {
     private static void loadBySystemEnum(Properties prop, JSONObject json) {
         for (SystemPropertiesEnum propEntry : SystemPropertiesEnum.values()) {
             json.put(propEntry.getKey(), prop.getProperty(propEntry.getKey(), propEntry.getValue()));
-        }
-    }
-
-    /**
-     * 读取配置文件或者读取默认的成员属性键值对配置
-     * @deprecated 这种写法不利于维护配置，改为由枚举进行匹配和配置
-     * @throws IOException
-     */
-    private static void loadBySystemConfig(Properties prop, JSONObject json) throws IOException {
-        for (int i = 0; i < KEYS.length; i++) {
-            json.put(KEYS[i], prop.getProperty(KEYS[i], VALUES[i]));
         }
     }
 
