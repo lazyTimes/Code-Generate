@@ -106,22 +106,11 @@ public class DbTypeConvertBean implements DbTypeConvert {
             POSTGRESQL_TYPE_MAPPING.put("int8", "Long");
             POSTGRESQL_TYPE_MAPPING.put("char", "String");
             POSTGRESQL_TYPE_MAPPING.put("varchar", "String");
-            // postgresql没有datetime
-//            MYSQL_TYPE_MAPPING.put("datetime", "Date");
-            // 使用java.util.Timestamp 时间戳对象
             POSTGRESQL_TYPE_MAPPING.put("timestamp", "Timestamp");
-
             POSTGRESQL_TYPE_MAPPING.put("bit", "Integer");
             // postgresql json类型，通常需要手写mybatis type convert。对于数据类型进行转化
-            POSTGRESQL_TYPE_MAPPING.put("JSON", "Json");
-            // mysql专有
-//            MYSQL_TYPE_MAPPING.put("tinyint", "Integer");
-//            MYSQL_TYPE_MAPPING.put("smallint", "Integer");
-            // postgresql无此类型
-//            MYSQL_TYPE_MAPPING.put("year", "Date");
+            POSTGRESQL_TYPE_MAPPING.put("json", "JSON");
             POSTGRESQL_TYPE_MAPPING.put("date", "Date");
-            // postgresql 没有 Bigint
-//            MYSQL_TYPE_MAPPING.put("bigint", "Long");
             POSTGRESQL_TYPE_MAPPING.put("decimal", "BigDecimal");
             POSTGRESQL_TYPE_MAPPING.put("double", "Double");
             POSTGRESQL_TYPE_MAPPING.put("float", "Float");
@@ -132,8 +121,6 @@ public class DbTypeConvertBean implements DbTypeConvert {
             POSTGRESQL_TYPE_MAPPING.put("money", "String");
             POSTGRESQL_TYPE_MAPPING.put("uuid", "String");
             POSTGRESQL_TYPE_MAPPING.put("point", "String");
-            // postgresql无此类型
-//            MYSQL_TYPE_MAPPING.put("mediumtext", "String");
             POSTGRESQL_TYPE_MAPPING.put("longtext", "String");
             POSTGRESQL_TYPE_MAPPING.put("time", "Date");
             // ===================== mysql ===================== //
