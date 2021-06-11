@@ -1,5 +1,11 @@
 package com.generate.strategy.sqlgen;
 
+import com.generate.bean.FieldInfo;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 /**
  * @author zhaoxudong
  * @version v1.0.0
@@ -7,7 +13,7 @@ package com.generate.strategy.sqlgen;
  * @Description : 允许数据库构建基本的表信息
  * @Create on : 2021/6/9 10:10
  **/
-public interface DbGenerateAble {
+public interface DbProcessAble {
 
     /**
      * 创建获取所有表详细信息的SQL语句
@@ -23,4 +29,12 @@ public interface DbGenerateAble {
      * @return
      */
     String genAllTables(String... params);
+
+    /**
+     * sql结果处理方法
+     * @param tableResult
+     * @param fieldList
+     * @throws SQLException
+     */
+    void processTableInfo(ResultSet tableResult, List<FieldInfo> fieldList) throws SQLException;
 }

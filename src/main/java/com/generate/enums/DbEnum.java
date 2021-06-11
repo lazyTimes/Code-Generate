@@ -73,6 +73,6 @@ public enum DbEnum {
                 return value;
             }
         }
-        return null;
+        throw new RuntimeException("当前程序不支持改数据库类型，请参考枚举变量设置dbType以及相关配置");
     }
 }
