@@ -105,7 +105,7 @@
                     ${r"</if>"}
                 <#elseif fieldItem.fieldClass=="Date" || fieldItem.fieldClass=="Timestamp">
                     ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
-                    and ${r"#{"}${fieldItem.fieldName}${r"}"} &lt; `${fieldItem.columnName}` &gt;= ${r"#{"}${fieldItem.fieldName}${r"}"}
+                    and ${r"#{"}${fieldItem.fieldName}Start${r"}"} &lt;= `${fieldItem.columnName}` &gt;= ${r"#{"}${fieldItem.fieldName}End${r"}"}
                     ${r"</if>"}
                 <#else >
                     ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
@@ -124,6 +124,19 @@
         <where>
             <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
             <#list classInfo.fieldList as fieldItem>
+            <#if fieldItem.fieldClass=="String">
+                ${r"<if test ='null != "}${classInfo.modelName}.${fieldItem.fieldName}${r" and '' != "}${classInfo.modelName}.${fieldItem.fieldName}${r"'>"}
+                and `${fieldItem.columnName}` = ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}${r"}"}
+                ${r"</if>"}
+            <#elseif fieldItem.fieldClass=="Date" || fieldItem.fieldClass=="Timestamp">
+                ${r"<if test ='null != "}${classInfo.modelName}.${fieldItem.fieldName}${r"'>"}
+                and ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}Start${r"}"} &lt;= `${fieldItem.columnName}` &gt;= ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}End${r"}"}
+                ${r"</if>"}
+            <#else >
+                ${r"<if test ='null != "}${classInfo.modelName}.${fieldItem.fieldName}${r"'>"}
+                and `${fieldItem.columnName}` = ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}${r"}"}
+                ${r"</if>"}
+            </#if>
             ${r"<if test ='null != "}${classInfo.modelName}.${fieldItem.fieldName}${r"'>"}
                 and `${fieldItem.columnName}` = ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}${r"}"}
             ${r"</if>"}
