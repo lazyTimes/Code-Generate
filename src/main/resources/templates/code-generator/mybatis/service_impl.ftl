@@ -2,7 +2,7 @@ package ${packageName}.service.impl;
 
 import ${packageName}.entity.*;
 import ${packageName}.common.PageList;
-import ${packageName}.dao.*;
+import ${packageName}.mapper.*;
 import ${packageName}.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,41 +19,41 @@ import java.util.List;
 public class ${classInfo.className}ServiceImpl implements ${classInfo.className}Service {
 
     @Autowired
-	${classInfo.className}Dao dao;
+	private ${classInfo.className}Mapper ${classInfo.className?substring(0,1)?lower_case}${classInfo.className?substring(1)}Mapper;
 
     @Override
     public int insert(${classInfo.className} ${classInfo.modelName}) {
-        return dao.insert(${classInfo.modelName});
+        return ${classInfo.className?substring(0,1)?lower_case}${classInfo.className?substring(1)}Mapper.insert(${classInfo.modelName});
     }
 
     @Override
     public int batchInsert(List<${classInfo.className}> list) {
-    	return dao.batchInsert(list);
+    	return ${classInfo.className?substring(0,1)?lower_case}${classInfo.className?substring(1)}Mapper.batchInsert(list);
     }
 
     @Override
     public int update(${classInfo.className} ${classInfo.modelName}) {
-    	return dao.update(${classInfo.modelName});
+    	return ${classInfo.className?substring(0,1)?lower_case}${classInfo.className?substring(1)}Mapper.update(${classInfo.modelName});
     }
 
     @Override
     public int delete(Object key) {
-    	return dao.delete(key);
+    	return ${classInfo.className?substring(0,1)?lower_case}${classInfo.className?substring(1)}Mapper.delete(key);
     }
 
     @Override
     public int batchDelete(List<Object> keys) {
-        return dao.batchDelete(keys);
+        return ${classInfo.className?substring(0,1)?lower_case}${classInfo.className?substring(1)}Mapper.batchDelete(keys);
     }
 
 	@Override
 	public ${classInfo.className} selectByKey(Object key) {
-		return dao.selectByKey(key);
+		return ${classInfo.className?substring(0,1)?lower_case}${classInfo.className?substring(1)}Mapper.selectByKey(key);
 	}
 
 	@Override
 	public List<${classInfo.className}> selectList(${classInfo.className} ${classInfo.modelName}) {
-		return dao.selectList(${classInfo.modelName});
+		return ${classInfo.className?substring(0,1)?lower_case}${classInfo.className?substring(1)}Mapper.selectList(${classInfo.modelName});
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ${classInfo.className}ServiceImpl implements ${classInfo.className}
 
 		int page = (offset - 1) * pageSize;
 
-		List<${classInfo.className}> list = dao.selectPage(${classInfo.modelName}, page, pageSize);
+		List<${classInfo.className}> list = ${classInfo.className?substring(0,1)?lower_case}${classInfo.className?substring(1)}Mapper.selectPage(${classInfo.modelName}, page, pageSize);
 
 		pageList.setList(list);
 		pageList.setStartPageNo(offset);
@@ -83,6 +83,6 @@ public class ${classInfo.className}ServiceImpl implements ${classInfo.className}
 
 	@Override
 	public int total(${classInfo.className} ${classInfo.modelName}) {
-		return dao.total(${classInfo.modelName});
+		return ${classInfo.className?substring(0,1)?lower_case}${classInfo.className?substring(1)}Mapper.total(${classInfo.modelName});
 	}
 }

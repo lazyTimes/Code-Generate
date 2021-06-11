@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="${packageName}.dao.${classInfo.className}Dao">
+<mapper namespace="${packageName}.mapper.${classInfo.className}Mapper">
 
     <resultMap id="BaseResultMap" type="${packageName}.entity.${classInfo.className}" >
     <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
@@ -97,23 +97,26 @@
         SELECT <include refid="Base_Column_List" />
         FROM ${classInfo.tableName}
         <where>
-            <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
-            <#list classInfo.fieldList as fieldItem >
-                <#if fieldItem.fieldClass=="String">
-                    ${r"<if test ='null != "}${fieldItem.fieldName}${r" and '' != "}${fieldItem.fieldName}${r"'>"}
-                    and `${fieldItem.columnName}` = ${r"#{"}${fieldItem.fieldName}${r"}"}
-                    ${r"</if>"}
-                <#elseif fieldItem.fieldClass=="Date" || fieldItem.fieldClass=="Timestamp">
-                    ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
-                    and ${r"#{"}${fieldItem.fieldName}Start${r"}"} &lt;= `${fieldItem.columnName}` &gt;= ${r"#{"}${fieldItem.fieldName}End${r"}"}
-                    ${r"</if>"}
-                <#else >
-                    ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
-                    and `${fieldItem.columnName}` = ${r"#{"}${fieldItem.fieldName}${r"}"}
-                    ${r"</if>"}
-                </#if>
-            </#list>
+        <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+        <#list classInfo.fieldList as fieldItem >
+            <#if fieldItem.fieldClass=="String">
+                ${r"<if test ='null != "}${fieldItem.fieldName}${" and \"\" != "}${fieldItem.fieldName}${r"'>"}
+                and `${fieldItem.columnName}` = ${r"#{"}${fieldItem.fieldName}${r"}"}
+                ${r"</if>"}
+            <#elseif fieldItem.fieldClass=="Date" || fieldItem.fieldClass=="Timestamp">
+                ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
+                and  `${fieldItem.columnName}` &gt;=  ${r"#{"}${fieldItem.fieldName}Start${r"}"}
+                ${r"</if>"}
+                ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
+                and `${fieldItem.columnName}` &lt;= ${r"#{"}${fieldItem.fieldName}End${r"}"}
+                ${r"</if>"}
+            <#else >
+                ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
+                and `${fieldItem.columnName}` = ${r"#{"}${fieldItem.fieldName}${r"}"}
+                ${r"</if>"}
             </#if>
+        </#list>
+        </#if>
         </where>
     </select>
 
@@ -125,21 +128,21 @@
             <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
             <#list classInfo.fieldList as fieldItem>
             <#if fieldItem.fieldClass=="String">
-                ${r"<if test ='null != "}${classInfo.modelName}.${fieldItem.fieldName}${r" and '' != "}${classInfo.modelName}.${fieldItem.fieldName}${r"'>"}
+                ${r"<if test ='null != "}${classInfo.modelName}.${fieldItem.fieldName}${" and \"\" != "}${classInfo.modelName}.${fieldItem.fieldName}${r"'>"}
                 and `${fieldItem.columnName}` = ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}${r"}"}
                 ${r"</if>"}
             <#elseif fieldItem.fieldClass=="Date" || fieldItem.fieldClass=="Timestamp">
                 ${r"<if test ='null != "}${classInfo.modelName}.${fieldItem.fieldName}${r"'>"}
-                and ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}Start${r"}"} &lt;= `${fieldItem.columnName}` &gt;= ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}End${r"}"}
+                and  `${fieldItem.columnName}` &gt;= ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}Start${r"}"}
+                ${r"</if>"}
+                ${r"<if test ='null != "}${classInfo.modelName}.${fieldItem.fieldName}${r"'>"}
+                and  `${fieldItem.columnName}` &lt;= ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}End${r"}"}
                 ${r"</if>"}
             <#else >
                 ${r"<if test ='null != "}${classInfo.modelName}.${fieldItem.fieldName}${r"'>"}
                 and `${fieldItem.columnName}` = ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}${r"}"}
                 ${r"</if>"}
             </#if>
-            ${r"<if test ='null != "}${classInfo.modelName}.${fieldItem.fieldName}${r"'>"}
-                and `${fieldItem.columnName}` = ${r"#{"}${classInfo.modelName}.${fieldItem.fieldName}${r"}"}
-            ${r"</if>"}
             </#list>
             </#if>
         </where>

@@ -1,4 +1,4 @@
-package ${packageName}.web;
+package ${packageName}.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;

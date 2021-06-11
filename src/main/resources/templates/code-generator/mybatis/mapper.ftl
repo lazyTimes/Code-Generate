@@ -1,4 +1,4 @@
-package ${packageName}.dao;
+package ${packageName}.mapper;
 
 import ${packageName}.entity.*;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,7 +13,7 @@ import java.util.List;
  * @date ${.now?string('yyyy/MM/dd')}
  */
 @Mapper
-public interface ${classInfo.className}Dao {
+public interface ${classInfo.className}Mapper {
 
     /**
      * [新增]

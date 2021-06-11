@@ -9,6 +9,8 @@ logging.file=/log/${genConfig.projectName}
 # mybaits配置文件
 mybatis.mapper-locations = classpath:mapper/*Mapper.xml
 mybatis.type-aliases-package = ${genConfig.packageName}.entity
+# 默认控制台打印sql
+mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
 
 # mysql配置
 spring.datasource.driverClassName=${genConfig.driver}

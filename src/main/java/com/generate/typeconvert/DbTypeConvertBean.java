@@ -42,6 +42,7 @@ public class DbTypeConvertBean implements DbTypeConvert {
             MYSQL_TYPE_MAPPING.put("tinyint", "Integer");
             MYSQL_TYPE_MAPPING.put("smallint", "Integer");
             MYSQL_TYPE_MAPPING.put("year", "Date");
+            MYSQL_TYPE_MAPPING.put("blob", "String");
             MYSQL_TYPE_MAPPING.put("date", "Date");
             MYSQL_TYPE_MAPPING.put("bigint", "Long");
             MYSQL_TYPE_MAPPING.put("decimal", "BigDecimal");
