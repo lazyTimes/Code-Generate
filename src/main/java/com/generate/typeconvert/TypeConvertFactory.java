@@ -10,8 +10,11 @@ import java.util.Map;
  * @Create on : 2021/6/10 18:24
  **/
 public class TypeConvertFactory implements DbTypeConvert{
+
+    private static final DbTypeConvert bean = new DbTypeConvertBean();
+
     @Override
-    public Map<String, String> getMysqlTypeMapping() {
-        return null;
+    public Map<String, String> getTypeMapping(String databaseType) {
+        return bean.getTypeMapping(databaseType);
     }
 }

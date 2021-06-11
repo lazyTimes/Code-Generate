@@ -3,9 +3,11 @@ package com.generate.util;
 import cn.hutool.core.collection.CollectionUtil;
 import com.generate.bean.ClassInfo;
 import com.generate.bean.FieldInfo;
+import com.generate.bean.GlobleConfig;
 import com.generate.strategy.sqlgen.DbGenerateAble;
 import com.generate.strategy.sqlgen.PostgreSqlDbGenerate;
 import com.generate.typeconvert.DbTypeConvertBean;
+import com.generate.typeconvert.TypeConvertFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.ResultSet;
@@ -26,6 +28,8 @@ import java.util.List;
 public class DataBaseUtil {
 
     private static final DbGenerateAble DB_GENERATE_ABLE = new PostgreSqlDbGenerate();
+
+    private static final TypeConvertFactory TYPE_CONVERT_FACTORY = new TypeConvertFactory();
 
     /***
      * 根据指定库获取单表相关参数
@@ -65,7 +69,7 @@ public class DataBaseUtil {
         while (tableResult.next()) {
             FieldInfo fieldInfo = new FieldInfo();
             fieldInfo.setColumnName(tableResult.getString(1));
-            fieldInfo.setFieldClass(new DbTypeConvertBean().getMysqlTypeMapping().get(tableResult.getString(2)));
+            fieldInfo.setFieldClass(TYPE_CONVERT_FACTORY.getTypeMapping(GlobleConfig.getGlobleConfig().getDataBaseType()).get(tableResult.getString(2)));
             String fieldName = StringUtil.underlineToCamelCaseAndReplaceDbFieldName(tableResult.getString(1));
             fieldInfo.setFieldName(fieldName);
             fieldInfo.setFieldComment(tableResult.getString(3));
@@ -89,7 +93,7 @@ public class DataBaseUtil {
         while (tableResult.next()) {
             FieldInfo fieldInfo = new FieldInfo();
             fieldInfo.setColumnName(tableResult.getString(1));
-            fieldInfo.setFieldClass(new DbTypeConvertBean().getMysqlTypeMapping().get(tableResult.getString(2)));
+            fieldInfo.setFieldClass(TYPE_CONVERT_FACTORY.getTypeMapping(GlobleConfig.getGlobleConfig().getDataBaseType()).get(tableResult.getString(2)));
             String fieldName = StringUtil.underlineToCamelCaseAndReplaceDbFieldName(tableResult.getString(1));
             fieldInfo.setFieldName(fieldName);
             fieldInfo.setFieldComment(tableResult.getString(3));

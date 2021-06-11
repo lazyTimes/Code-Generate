@@ -12,7 +12,8 @@ import java.util.Map;
 public interface DbTypeConvert {
     /**
      * 根据指定数据库获取对应的映射map
+     *
      * @return
      */
-    Map<String, String> getMysqlTypeMapping();
+    Map<String, String> getTypeMapping(String databaseType);
 }
