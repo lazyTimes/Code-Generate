@@ -3,7 +3,7 @@ package com.generate.strategy.sqlgen;
 import com.generate.bean.FieldInfo;
 import com.generate.bean.GlobleConfig;
 import com.generate.typeconvert.TypeConvertFactory;
-import com.generate.util.StringUtil;
+import com.generate.util.DbCheckUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.ResultSet;
@@ -37,7 +37,7 @@ public class PostgreSqlDbProcess implements DbProcessAble {
             FieldInfo fieldInfo = new FieldInfo();
             fieldInfo.setColumnName(tableResult.getString(1));
             fieldInfo.setFieldClass(TYPE_CONVERT_FACTORY.getTypeMapping(GlobleConfig.getGlobleConfig().getDataBaseType()).get(tableResult.getString(2)));
-            String fieldName = StringUtil.underlineToCamelCaseAndReplaceDbFieldName(tableResult.getString(1));
+            String fieldName = DbCheckUtils.underlineToCamelCaseAndReplaceDbFieldName(tableResult.getString(1));
             fieldInfo.setFieldName(fieldName);
             fieldInfo.setFieldComment(tableResult.getString(3));
             // 维护表结构字段 2 data_type,4 6 length, 5 nullAble

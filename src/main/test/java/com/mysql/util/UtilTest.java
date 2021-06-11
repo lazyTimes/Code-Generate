@@ -1,8 +1,8 @@
-package com.mysql.util;
+package java.com.mysql.util;
 
 import com.generate.factory.ClassInfoFactory;
 import com.generate.factory.PropertiesFactory;
-import com.generate.util.DBUtil;
+import com.generate.util.DataBaseUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +27,7 @@ public class UtilTest {
 
     @Test
     public void getConnection() {
-        System.out.println(DBUtil.getConnection());
+        System.out.println(DataBaseUtil.getConnection());
     }
 
     @Test

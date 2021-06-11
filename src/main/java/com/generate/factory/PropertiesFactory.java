@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import static com.generate.util.FormatUtil.concat;
+
 /**
  * ******************************
  * author：      柯贤铭
@@ -41,7 +43,7 @@ public class PropertiesFactory {
      * @throws IOException
      */
     private static void loadSystemConfig() throws IOException {
-        String filePath = System.getProperty("user.dir") + SystemConfig.SPACER + SystemConfig.APPLICATION_PROPERTIES_FILE;
+        String filePath = concat(System.getProperty("user.dir"), SystemConfig.SPACER, SystemConfig.APPLICATION_PROPERTIES_FILE);
         InputStream inStream;
         if (new File(filePath).exists()) {
             inStream = new FileInputStream(filePath);
@@ -57,7 +59,7 @@ public class PropertiesFactory {
         configurationInfo.setIncludeMap(parseInclude(configurationInfo.getInclude()));
         configurationInfo.setCustomHandleIncludeMap(parseInclude(configurationInfo.getCustomHandleInclude()));
         // 解析项目目录地址
-        String projectPath = configurationInfo.getRootPath() + SystemConfig.SPACER + configurationInfo.getProjectName();
+        String projectPath = concat(configurationInfo.getRootPath(), SystemConfig.SPACER, configurationInfo.getProjectName());
         configurationInfo.setProjectPath(projectPath);
         // 共有环境变量设置参数
         GlobleConfig.setGlobleConfig(configurationInfo);
@@ -66,6 +68,7 @@ public class PropertiesFactory {
 
     /**
      * 读取配置文件
+     *
      * @param prop
      * @param json
      */
