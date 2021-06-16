@@ -1,6 +1,6 @@
 package com.generate.engine.impl;
 
-import com.generate.bean.GlobleConfig;
+import com.generate.bean.PropertiesConfig;
 import com.generate.factory.ClassInfoFactory;
 import com.generate.intercept.CustomEngine;
 import org.reflections.Reflections;
@@ -39,12 +39,12 @@ public final class CustomEngineImpl {
         for (Class<? extends CustomEngine> aClass : classes) {
 
             // 基于配置项检测是否需要启用自定义实现类
-            if ("*;".equals(GlobleConfig.getGlobleConfig().getCustomHandleInclude()) ||
-                    GlobleConfig.getGlobleConfig().getCustomHandleIncludeMap().containsKey(aClass.getSimpleName())) {
+            if ("*;".equals(PropertiesConfig.getConfig().getCustomHandleInclude()) ||
+                    PropertiesConfig.getConfig().getCustomHandleIncludeMap().containsKey(aClass.getSimpleName())) {
                 try {
                     // 基于反射构建对象 - 调用handle方法
                     CustomEngine engine = aClass.newInstance();
-                    engine.handle(GlobleConfig.getGlobleConfig(), ClassInfoFactory.getClassInfoList());
+                    engine.handle(PropertiesConfig.getConfig(), ClassInfoFactory.getClassInfoList());
                 } catch (InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                 }

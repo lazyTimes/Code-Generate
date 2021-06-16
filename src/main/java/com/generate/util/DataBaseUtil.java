@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.generate.bean.ClassInfo;
 import com.generate.bean.ConfigurationInfo;
 import com.generate.bean.FieldInfo;
-import com.generate.bean.GlobleConfig;
+import com.generate.bean.PropertiesConfig;
 import com.generate.strategy.sqlgen.GenerateContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class DataBaseUtil {
 
     static {
         try {
-            Class.forName(GlobleConfig.getGlobleConfig().getDriver());
+            Class.forName(PropertiesConfig.getConfig().getDriver());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -44,7 +44,7 @@ public class DataBaseUtil {
      * @throws Exception
      */
     private static Connection produceConnection() throws Exception {
-        ConfigurationInfo config = GlobleConfig.getGlobleConfig();
+        ConfigurationInfo config = PropertiesConfig.getConfig();
         String url = String.format("jdbc:%s://%s:%s/%s?characterEncoding=%s", config.getDataBaseType(), config.getIp(), config.getPort(), config.getDataBase(), config.getEncoding());
         return DriverManager.getConnection(url, config.getLoginName(), config.getPassWord());
     }
@@ -75,7 +75,7 @@ public class DataBaseUtil {
      */
     public static ClassInfo parseClassInfo(String tableName) throws SQLException {
         // tableSql
-        String tableInfoSql = GENERATE_CONTEXT.genGenerator(GlobleConfig.getGlobleConfig().getDataBaseType()).genAllTableInfoSql(tableName);
+        String tableInfoSql = GENERATE_CONTEXT.genGenerator(PropertiesConfig.getConfig().getDataBaseType()).genAllTableInfoSql(tableName);
         Statement statement = DataBaseUtil.getConnection().createStatement();
         ResultSet tableResult = statement.executeQuery(tableInfoSql);
         // 构建ClassInfo信息
@@ -102,7 +102,7 @@ public class DataBaseUtil {
     }
 
     private static void processTableInfo(ResultSet tableResult, List<FieldInfo> fieldList) throws SQLException {
-        GENERATE_CONTEXT.genGenerator(GlobleConfig.getGlobleConfig().getDataBaseType())
+        GENERATE_CONTEXT.genGenerator(PropertiesConfig.getConfig().getDataBaseType())
                 .processTableInfo(tableResult, fieldList);
     }
 
@@ -113,7 +113,7 @@ public class DataBaseUtil {
         // result
         List<String> result = new ArrayList<>();
         // sql
-        String sql = GENERATE_CONTEXT.genGenerator(GlobleConfig.getGlobleConfig().getDataBaseType()).genAllTables();
+        String sql = GENERATE_CONTEXT.genGenerator(PropertiesConfig.getConfig().getDataBaseType()).genAllTables();
         Statement statement = DataBaseUtil.getConnection().createStatement();
         ResultSet rs = statement.executeQuery(sql);
         while (rs.next()) {

@@ -19,10 +19,8 @@ public class DefaultEngineTest {
 
     @Before
     public void before() {
-
         classInfos = ClassInfoFactory.getClassInfoList();
-
-        executor = new DefaultEngine();
+//        executor = new DefaultEngine(config);
     }
 
     @Test

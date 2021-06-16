@@ -3,7 +3,7 @@ package com.generate.factory;
 import cn.hutool.core.collection.CollectionUtil;
 import com.generate.bean.ClassInfo;
 import com.generate.bean.ConfigurationInfo;
-import com.generate.bean.GlobleConfig;
+import com.generate.bean.PropertiesConfig;
 import com.generate.util.DataBaseUtil;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class ClassInfoFactory {
                 if (CollectionUtil.isEmpty(CLASS_INFO_LIST)) {
                     try {
                         // 获取配置项
-                        ConfigurationInfo config = GlobleConfig.getGlobleConfig();
+                        ConfigurationInfo config = PropertiesConfig.getConfig();
 
                         List<String> tableNames = DataBaseUtil.getAllTableNames();
                         for (String tableName : tableNames) {

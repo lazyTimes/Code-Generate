@@ -1,6 +1,9 @@
 package com.generate;
 
+import com.generate.bean.PropertiesConfig;
 import com.generate.engine.AbstractEngine;
+import com.generate.engine.impl.DefaultEngine;
+import com.generate.factory.PropertiesFactory;
 
 /**
  * ******************************
@@ -16,7 +19,7 @@ public class GenerateApp {
      * 执行 - 构建项目
      */
     public static void main(String[] args){
-        AbstractEngine engine = AbstractEngine.init();
+        AbstractEngine engine = new DefaultEngine(PropertiesConfig.getConfig());
         engine.execute();
     }
 }

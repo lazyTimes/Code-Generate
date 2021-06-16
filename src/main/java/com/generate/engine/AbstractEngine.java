@@ -1,7 +1,8 @@
 package com.generate.engine;
 
 import com.generate.bean.ClassInfo;
-import com.generate.bean.GlobleConfig;
+import com.generate.bean.PropertiesConfig;
+import com.generate.config.FreeMarkerConfigLoader;
 import com.generate.engine.impl.CustomEngineImpl;
 import com.generate.engine.impl.DefaultEngine;
 import com.generate.factory.ClassInfoFactory;
@@ -28,28 +29,11 @@ public abstract class AbstractEngine implements GeneralEngine {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractEngine.class);
 
-    private static Configuration configuration;
-
     /***
      * 获取FreeMaker创建模板
      */
     public static Configuration getFreeMakerConfiguration() {
-        if (configuration == null) {
-            configuration = new Configuration(Configuration.VERSION_2_3_23);
-            try {
-                configuration.setTemplateLoader(new ClassTemplateLoader(AbstractEngine.class, TEMPLATE_BASE_PACKAGE));
-                configuration.setNumberFormat("#");
-                configuration.setClassicCompatible(true);
-                configuration.setDefaultEncoding("UTF-8");
-                configuration.setLocale(Locale.CHINA);
-                configuration.setAPIBuiltinEnabled(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw e;
-            }
-            configuration.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
-        }
-        return configuration;
+        return FreeMarkerConfigLoader.loadFreeMarkerVersion2323();
     }
 
     /**
@@ -67,19 +51,10 @@ public abstract class AbstractEngine implements GeneralEngine {
             genConfig();
             genFix();
         }
-        logger.info(GlobleConfig.getGlobleConfig().getProjectName() + " 构建完成.");
+        logger.info(PropertiesConfig.getConfig().getProjectName() + " 构建完成.");
         // 执行自定义拦截接口 执行
         logger.info("=== 开始构建生成代码文件 ===");
         CustomEngineImpl.handleCustom();
-    }
-
-    /***
-     * 初始化工程
-     * 加载配置文件, 加载数据库连接, 加载数据表字段信息, 加载FreeMaker模板
-     * 获得执行器
-     */
-    public static AbstractEngine init() {
-        return new DefaultEngine();
     }
 
 }

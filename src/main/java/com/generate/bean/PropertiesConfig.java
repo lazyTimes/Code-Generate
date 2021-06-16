@@ -12,7 +12,7 @@ import java.io.IOException;
  * version:      V1.0
  * ******************************
  */
-public final class GlobleConfig {
+public final class PropertiesConfig {
 
     // 配置信息
     private volatile static ConfigurationInfo CONFIGURATION_INFO = null;
@@ -29,13 +29,15 @@ public final class GlobleConfig {
      * 获取全局配置
      * 单例模式 双重锁校验
      */
-    public static ConfigurationInfo getGlobleConfig() {
+    public static ConfigurationInfo getConfig() {
         return CONFIGURATION_INFO;
     }
 
-    public static void setGlobleConfig(ConfigurationInfo CONFIGURATIONInfo) {
-        GlobleConfig.CONFIGURATION_INFO = CONFIGURATIONInfo;
+    public static void setConfig(ConfigurationInfo CONFIGURATIONInfo) {
+        PropertiesConfig.CONFIGURATION_INFO = CONFIGURATIONInfo;
     }
 
-    private GlobleConfig() {}
+    private PropertiesConfig() {
+        throw new AssertionError("can not newInstance");
+    }
 }

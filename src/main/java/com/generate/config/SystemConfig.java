@@ -18,6 +18,10 @@ public final class SystemConfig {
     public static final String APPLICATION_PROPERTIES_FILE = "application.properties";
     /** 生成具体文件的JAVA文件后缀名 */
     public static final String GENERATE_JAVA_FILE_SUFFIX = ".java";
+    /** 生成具体文件的XML文件后缀名 */
+    public static final String GENERATE_XML_FILE_SUFFIX = ".xml";
+    /** 生成具体文件的Properties文件后缀名 */
+    public static final String GENERATE_PROPRETIES_FILE_SUFFIX = ".xml";
     /** 模板文件存放地址的通用前缀 */
     public static final String CODE_GENERATE_FILE_PREFIX = "code-generator";
     /** layui 文件地址前缀 */
@@ -26,8 +30,23 @@ public final class SystemConfig {
     public static final String MARK_DOWN_FILE_PREFIX = "markdown-file";
      /** 后端文件模板 文件地址前缀 */
     public static final String BACK_FILE_PREFIX = "mybatis";
-    /** 其他项目必须文件 文件地址前缀 */
+    /** 后端文件模板 文件地址前缀 */
     public static final String COMMON_FILE_PREFIX = "common";
+    /** 控制器文件模板 文件地址前缀 */
+    public static final String CONTROLLER_FILE_PREFIX = "controller";
+    /** mapper 父文件夹包名 */
+    public static final String MAPPER_PARENT_FOLDER = "mapper";
+    /** dao 层文件后缀 */
+    public static final String MAPPER_XML_SUFFIX = "Mapper.xml";
+    /** service 父文件夹包名 */
+    public static final String SERVICE_PARENT_FOLDER = "service";
+    /** service impl 父文件夹包名 */
+    public static final String SERVICE_IMPL_PARENT_FOLDER = "service.impl";
+
+
+
+    /** 实体对象 */
+    public static final String ENTITY_FILE_PREFIX = "entity";
     /**  JAVA地址 */
     public static final String SRC_MAIN_JAVA = SPACER + "src" + SPACER + "main" + SPACER + "java" + SPACER;
      /**  RESOURCE地址 */

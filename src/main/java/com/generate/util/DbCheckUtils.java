@@ -1,6 +1,6 @@
 package com.generate.util;
 
-import com.generate.bean.GlobleConfig;
+import com.generate.bean.PropertiesConfig;
 import com.generate.enums.DbEnum;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,7 +26,7 @@ public class DbCheckUtils {
      * 解析MySQL 关键字
      */
     private static void parseKeyWords() {
-        String dataBaseType = GlobleConfig.getGlobleConfig().getDataBaseType();
+        String dataBaseType = PropertiesConfig.getConfig().getDataBaseType();
         DbEnum enumOrNullByName = DbEnum.getEnumOrNullByName(dataBaseType);
         String[] keys = enumOrNullByName.getKeyWord().split(";");
         for (String key : keys) {

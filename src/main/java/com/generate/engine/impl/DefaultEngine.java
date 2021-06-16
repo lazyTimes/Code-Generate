@@ -2,7 +2,6 @@ package com.generate.engine.impl;
 
 import com.generate.bean.ClassInfo;
 import com.generate.bean.ConfigurationInfo;
-import com.generate.bean.GlobleConfig;
 import com.generate.engine.AbstractEngine;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -16,6 +15,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.generate.config.SystemConfig.*;
 import static com.generate.config.SystemConfig.FreeMarkerFtlFileConfig.*;
@@ -33,12 +33,12 @@ public final class DefaultEngine extends AbstractEngine {
 
     private static Logger logger = LoggerFactory.getLogger(DefaultEngine.class);
 
-    private ConfigurationInfo config;
+    private final ConfigurationInfo config;
 
-    private Configuration configuration;
+    private final Configuration configuration;
 
-    public DefaultEngine() {
-        config = GlobleConfig.getGlobleConfig();
+    public DefaultEngine(ConfigurationInfo config) {
+        this.config = Objects.requireNonNull(config);
         configuration = AbstractEngine.getFreeMakerConfiguration();
     }
 
@@ -104,18 +104,18 @@ public final class DefaultEngine extends AbstractEngine {
 
     @Override
     public void genController(ClassInfo classInfo) {
-        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, CONTROLLER), "controller", concat("Controller", GENERATE_JAVA_FILE_SUFFIX));
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, CONTROLLER), CONTROLLER_FILE_PREFIX, concat("Controller", GENERATE_JAVA_FILE_SUFFIX));
     }
 
     @Override
     public void genService(ClassInfo classInfo) {
-        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, SERVICE), "service", concat("Service", GENERATE_JAVA_FILE_SUFFIX));
-        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, SERVICE_IMPL), "service.impl", concat("ServiceImpl", GENERATE_JAVA_FILE_SUFFIX));
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, SERVICE), SERVICE_PARENT_FOLDER, concat("Service", GENERATE_JAVA_FILE_SUFFIX));
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, SERVICE_IMPL), SERVICE_IMPL_PARENT_FOLDER, concat("ServiceImpl", GENERATE_JAVA_FILE_SUFFIX));
     }
 
     @Override
     public void genRepositoryClass(ClassInfo classInfo) {
-        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MAPPER), "mapper", concat("Mapper", GENERATE_JAVA_FILE_SUFFIX));
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MAPPER), MAPPER_PARENT_FOLDER, concat("Mapper", GENERATE_JAVA_FILE_SUFFIX));
     }
 
     @Override
@@ -123,14 +123,14 @@ public final class DefaultEngine extends AbstractEngine {
         // 构建文件地址
         String rootPath = config.getRootPath() + SPACER + config.getProjectName();
         // Example: C:\Users\Administrator\Desktop\Codes\KerwinBoots\src\main\resources\mapper\ScriptDirMapper.xml
-        String filePath = rootPath + SRC_MAIN_RESOURCE + SPACER + "mapper" + SPACER
-                + classInfo.getClassName() + "Mapper.xml";
+        String filePath = rootPath + SRC_MAIN_RESOURCE + SPACER + MAPPER_PARENT_FOLDER + SPACER
+                + classInfo.getClassName() + MAPPER_XML_SUFFIX;
         processTemplate(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MAPPER_IMPL), filePath);
     }
 
     @Override
     public void genEntity(ClassInfo classInfo) {
-        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MODEL), "entity", GENERATE_JAVA_FILE_SUFFIX);
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MODEL), ENTITY_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
     }
 
     @Override
@@ -140,15 +140,15 @@ public final class DefaultEngine extends AbstractEngine {
         // POM依赖
         ClassInfo pom = new ClassInfo();
         pom.setClassName("pom");
-        processTemplate(pom, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, POM), concat(rootPath, SPACER, pom.getClassName(), ".xml"));
+        processTemplate(pom, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, POM), concat(rootPath, SPACER, pom.getClassName(), GENERATE_XML_FILE_SUFFIX));
         // logback日志
         ClassInfo log = new ClassInfo();
         log.setClassName("logback-spring");
-        processTemplate(log, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, LOGBACK_SPRING), concat(rootPath, SRC_MAIN_RESOURCE, log.getClassName(), ".xml"));
+        processTemplate(log, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, LOGBACK_SPRING), concat(rootPath, SRC_MAIN_RESOURCE, log.getClassName(), GENERATE_XML_FILE_SUFFIX));
         // 配置文件
         ClassInfo properties = new ClassInfo();
         properties.setClassName("application");
-        processTemplate(properties, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, APPLICATION_CONFIG), concat(rootPath, SRC_MAIN_RESOURCE, properties.getClassName(), ".properties"));
+        processTemplate(properties, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, APPLICATION_CONFIG), concat(rootPath, SRC_MAIN_RESOURCE, properties.getClassName(), GENERATE_PROPRETIES_FILE_SUFFIX));
     }
 
 

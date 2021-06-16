@@ -2,7 +2,7 @@ package com.generate.factory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.generate.bean.ConfigurationInfo;
-import com.generate.bean.GlobleConfig;
+import com.generate.bean.PropertiesConfig;
 import com.generate.config.SystemConfig;
 import com.generate.enums.SystemPropertiesEnum;
 import org.apache.commons.lang3.StringUtils;
@@ -62,7 +62,7 @@ public class PropertiesFactory {
         String projectPath = concat(configurationInfo.getRootPath(), SystemConfig.SPACER, configurationInfo.getProjectName());
         configurationInfo.setProjectPath(projectPath);
         // 共有环境变量设置参数
-        GlobleConfig.setGlobleConfig(configurationInfo);
+        PropertiesConfig.setConfig(configurationInfo);
         logger.info("Properties load Successful, Msg is: " + json);
     }
 

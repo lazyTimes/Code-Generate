@@ -1,7 +1,7 @@
 package com.generate.strategy.sqlgen;
 
 import com.generate.bean.FieldInfo;
-import com.generate.bean.GlobleConfig;
+import com.generate.bean.PropertiesConfig;
 import com.generate.typeconvert.TypeConvertFactory;
 import com.generate.util.DbCheckUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,13 +26,13 @@ public class MysqlDbProcess implements DbProcessAble {
     public String genAllTableInfoSql(String... params) {
         return MessageFormat.format("select column_name,data_type,column_comment,numeric_precision," +
                 "numeric_scale,character_maximum_length,is_nullable nullable from information_schema.columns " +
-                "where table_name = \"{0}\" and table_schema = \"{1}\"", params[0], GlobleConfig.getGlobleConfig().getDataBase());
+                "where table_name = \"{0}\" and table_schema = \"{1}\"", params[0], PropertiesConfig.getConfig().getDataBase());
     }
 
     @Override
     public String genAllTables(String... params) {
         return MessageFormat.format("select table_name from information_schema.tables where table_schema=\"{0}\" and table_type=\"{1}\";",
-                GlobleConfig.getGlobleConfig().getDataBase(), "base table");
+                PropertiesConfig.getConfig().getDataBase(), "base table");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class MysqlDbProcess implements DbProcessAble {
         while (tableResult.next()) {
             FieldInfo fieldInfo = new FieldInfo();
             fieldInfo.setColumnName(tableResult.getString(1));
-            fieldInfo.setFieldClass(TYPE_CONVERT_FACTORY.getTypeMapping(GlobleConfig.getGlobleConfig().getDataBaseType()).get(tableResult.getString(2)));
+            fieldInfo.setFieldClass(TYPE_CONVERT_FACTORY.getTypeMapping(PropertiesConfig.getConfig().getDataBaseType()).get(tableResult.getString(2)));
             String fieldName = DbCheckUtils.underlineToCamelCaseAndReplaceDbFieldName(tableResult.getString(1));
             fieldInfo.setFieldName(fieldName);
             fieldInfo.setFieldComment(tableResult.getString(3));
