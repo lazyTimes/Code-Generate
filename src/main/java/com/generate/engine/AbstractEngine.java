@@ -27,10 +27,6 @@ import static com.generate.config.SystemConfig.TEMPLATE_BASE_PACKAGE;
  */
 public abstract class AbstractEngine implements GeneralEngine {
 
-    enum buildConfig{
-        SERVICE, CONTROLLER, MAPPER, MODEL, SERVICE_IMPL,
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(AbstractEngine.class);
 
     /***
@@ -40,13 +36,14 @@ public abstract class AbstractEngine implements GeneralEngine {
         return FreeMarkerConfigLoader.loadFreeMarkerVersion2323();
     }
 
+
     /**
      * TODO 重构点2： 支持自定义选择生成那个模板
      */
     @Override
     public void execute() {
         // 默认获取properties中的配置
-        List<ClassInfo> classInfos = ClassInfoFactory.getClassInfoList(PropertiesConfig.getConfig().getDataBaseType());
+        List<ClassInfo> classInfos = ClassInfoFactory.getClassInfoList(PropertiesConfig.getConfig().getDataBaseType(), PropertiesConfig.getConfig());
         for (ClassInfo classInfo : classInfos) {
             genController(classInfo);
             genEntity(classInfo);
@@ -62,4 +59,12 @@ public abstract class AbstractEngine implements GeneralEngine {
         CustomEngineImpl.handleCustom();
     }
 
+    /**
+     * 处理模板参数内容
+     *
+     * @param classInfo    类信息
+     * @param templateName 模板名称
+     * @param filePath     文件路径
+     */
+    protected abstract void processTemplate(ClassInfo classInfo, String templateName, String filePath);
 }

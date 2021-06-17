@@ -42,16 +42,14 @@ public final class SystemConfig {
     public static final String SERVICE_PARENT_FOLDER = "service";
     /** service impl 父文件夹包名 */
     public static final String SERVICE_IMPL_PARENT_FOLDER = "service.impl";
-
-
-
     /** 实体对象 */
     public static final String ENTITY_FILE_PREFIX = "entity";
     /**  JAVA地址 */
     public static final String SRC_MAIN_JAVA = SPACER + "src" + SPACER + "main" + SPACER + "java" + SPACER;
      /**  RESOURCE地址 */
     public static final String SRC_MAIN_RESOURCE = SPACER + "src" + SPACER + "main" + SPACER + "resources" + SPACER;
-
+    /** 系统自定规则，代表获取所有的表或者获取所有的信息等 */
+    public static final String MATCH_ALL_MARK = "*;";
     /**
      * freemarker 模板文件名称配置
      */

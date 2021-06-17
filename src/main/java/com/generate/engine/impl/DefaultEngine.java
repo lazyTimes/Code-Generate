@@ -54,17 +54,17 @@ public final class DefaultEngine extends AbstractEngine {
         // Example: F:\code\Demo\src\main\java\com\demo\controller\ScriptDirController.java
         String filePath = concat(config.getProjectPath(), SRC_MAIN_JAVA, path, SPACER
                 , parentPackage.replace(".", SPACER), SPACER, classInfo.getClassName(), classSuffix);
-        logger.info("文件地址:{}", filePath);
+        logger.info("生成文件地址:{}", filePath);
         processTemplate(classInfo, templateName, filePath);
     }
 
     /***
-     * FreeMarker 模板固定方法
+     * 处理模板的参数固定方法，默认使用此配置，子类可以重写此部分内容
      * @param classInfo
      * @param templateName
      * @param filePath
      */
-    private void processTemplate(ClassInfo classInfo, String templateName, String filePath) {
+    protected void processTemplate(ClassInfo classInfo, String templateName, String filePath) {
         try {
             File file = new File(filePath);
             file.getParentFile().mkdirs();
@@ -81,6 +81,7 @@ public final class DefaultEngine extends AbstractEngine {
             writer.close();
         } catch (IOException | TemplateException e) {
             e.printStackTrace();
+            logger.error("生成模板失败，失败原因为:{}", e.getLocalizedMessage());
         }
     }
 
@@ -121,11 +122,15 @@ public final class DefaultEngine extends AbstractEngine {
     @Override
     public void genRepositoryXml(ClassInfo classInfo) {
         // 构建文件地址
-        String rootPath = config.getRootPath() + SPACER + config.getProjectName();
+        String rootPath = getRootPath();
         // Example: C:\Users\Administrator\Desktop\Codes\KerwinBoots\src\main\resources\mapper\ScriptDirMapper.xml
-        String filePath = rootPath + SRC_MAIN_RESOURCE + SPACER + MAPPER_PARENT_FOLDER + SPACER
-                + classInfo.getClassName() + MAPPER_XML_SUFFIX;
+        String filePath = concat(rootPath, SRC_MAIN_RESOURCE, SPACER, MAPPER_PARENT_FOLDER, SPACER
+                , classInfo.getClassName(), MAPPER_XML_SUFFIX);
         processTemplate(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MAPPER_IMPL), filePath);
+    }
+
+    private String getRootPath() {
+        return concat(config.getRootPath(), SPACER, config.getProjectName());
     }
 
     @Override
@@ -136,7 +141,7 @@ public final class DefaultEngine extends AbstractEngine {
     @Override
     public void genConfig() {
         // 构建文件地址
-        String rootPath = concat(config.getRootPath(), SPACER, config.getProjectName());
+        String rootPath = getRootPath();
         // POM依赖
         ClassInfo pom = new ClassInfo();
         pom.setClassName("pom");

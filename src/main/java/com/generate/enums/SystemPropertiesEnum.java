@@ -1,5 +1,7 @@
 package com.generate.enums;
 
+import static com.generate.config.SystemConfig.MATCH_ALL_MARK;
+
 /**
  * @author zhaoxudong
  * @version v1.0.0
@@ -17,11 +19,11 @@ public enum SystemPropertiesEnum {
     LOGIN_NAME("loginName", "root"),
     PASSWORD("password", "SinoPay2020_"),
     DATABASE("dataBase", ""),
-    INCLUDE_TABLES("include", "*;"),
+    INCLUDE_TABLES("include", MATCH_ALL_MARK),
     PROJECT_NAME("projectName", "Demo"),
     PACKAGE_NAME("packageName", "com.demo"),
     ROOT_PATH("rootPath", "C:\\code"),
-    CUSTOM_HANDLE_INCLUDE("customHandleInclude", "*;"),
+    CUSTOM_HANDLE_INCLUDE("customHandleInclude", MATCH_ALL_MARK),
     AUTHOR("authorName", "none");
 
     SystemPropertiesEnum(String key, String value) {

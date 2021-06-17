@@ -1,7 +1,5 @@
 package com.generate.model;
 
-import com.generate.model.dto.GenerateTableParamDto;
-
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +12,7 @@ import java.util.Map;
  **/
 public class WebEngineConfig {
 
-    public static class WebGenrateParam{
+    public static class WebGenerateParam {
         /**
          * 字段用逗号分割
          */
@@ -162,7 +160,23 @@ public class WebEngineConfig {
      */
     private String projectPath;
 
-    private List<WebGenrateParam> webGenrateParams;
+    /**
+     * 生成的具体参数，后续根据此内容变量进行处理
+     */
+    private List<WebGenerateParam> webGenerateParams;
+
+    /**
+     * 生成选项
+     */
+    private List<String> matters;
+
+    public List<String> getMatters() {
+        return matters;
+    }
+
+    public void setMatters(List<String> matters) {
+        this.matters = matters;
+    }
 
     public String getIp() {
         return ip;
@@ -300,12 +314,12 @@ public class WebEngineConfig {
         this.projectPath = projectPath;
     }
 
-    public List<WebGenrateParam> getWebGenrateParams() {
-        return webGenrateParams;
+    public List<WebGenerateParam> getWebGenerateParams() {
+        return webGenerateParams;
     }
 
-    public void setWebGenrateParams(List<WebGenrateParam> webGenrateParams) {
-        this.webGenrateParams = webGenrateParams;
+    public void setWebGenerateParams(List<WebGenerateParam> webGenerateParams) {
+        this.webGenerateParams = webGenerateParams;
     }
 
     @Override
@@ -328,7 +342,7 @@ public class WebEngineConfig {
                 ", authorName='" + authorName + '\'' +
                 ", rootPath='" + rootPath + '\'' +
                 ", projectPath='" + projectPath + '\'' +
-                ", webGenrateParams=" + webGenrateParams +
+                ", webGenrateParams=" + webGenerateParams +
                 '}';
     }
 }
