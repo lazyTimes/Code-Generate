@@ -1,9 +1,11 @@
 package com.generate.engine.impl;
 
 import com.generate.bean.ClassInfo;
-import com.generate.bean.WebGenerateConfig;
+import com.generate.bean.GenerateConfigConvert;
+import com.generate.bean.PropertiesConfig;
 import com.generate.config.FreeMarkerConfigLoader;
 import com.generate.engine.AbstractEngine;
+import com.generate.factory.ClassInfoFactory;
 import com.generate.model.WebEngineConfig;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -16,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -42,7 +45,7 @@ public class WebEngine extends AbstractEngine {
     public WebEngine(WebEngineConfig webEngineConfig) {
         this.webEngineConfig = Objects.requireNonNull(webEngineConfig);
         this.configuration = FreeMarkerConfigLoader.loadFreeMarkerVersion2323();
-        defaultEngine = new DefaultEngine(WebGenerateConfig.convertAndReturn(webEngineConfig));
+        defaultEngine = new DefaultEngine(GenerateConfigConvert.convertConfigInfo(webEngineConfig));
     }
 
     /***
@@ -108,26 +111,44 @@ public class WebEngine extends AbstractEngine {
 
     @Override
     public void genService(ClassInfo classInfo) {
-
+        defaultEngine.genService(classInfo);
     }
 
     @Override
     public void genRepositoryClass(ClassInfo classInfo) {
-
+        defaultEngine.genRepositoryClass(classInfo);
     }
 
     @Override
     public void genRepositoryXml(ClassInfo classInfo) {
-
+        defaultEngine.genRepositoryXml(classInfo);
     }
 
     @Override
     public void genEntity(ClassInfo classInfo) {
-
+        defaultEngine.genEntity(classInfo);
     }
 
     @Override
     public void genConfig() {
+        defaultEngine.genConfig();
+    }
 
+    @Override
+    public void execute() {
+        List<ClassInfo> classInfos = ClassInfoFactory.getClassInfoList(PropertiesConfig.getConfig().getDataBaseType());
+        for (ClassInfo classInfo : classInfos) {
+            genController(classInfo);
+            genEntity(classInfo);
+            genRepositoryClass(classInfo);
+            genService(classInfo);
+            genRepositoryXml(classInfo);
+            genConfig();
+            genFix();
+        }
+        logger.info(PropertiesConfig.getConfig().getProjectName() + " 构建完成.");
+        // 执行自定义拦截接口 执行
+        logger.info("=== 开始构建生成代码文件 ===");
+        CustomEngineImpl.handleCustom();
     }
 }

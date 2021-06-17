@@ -73,9 +73,9 @@ public class DataBaseUtil {
      * 根据指定库获取单表相关参数
      * @param tableName   表名
      */
-    public static ClassInfo parseClassInfo(String tableName) throws SQLException {
+    public static ClassInfo parseClassInfo(String databaseType, String tableName) throws SQLException {
         // tableSql
-        String tableInfoSql = GENERATE_CONTEXT.genGenerator(PropertiesConfig.getConfig().getDataBaseType()).genAllTableInfoSql(tableName);
+        String tableInfoSql = GENERATE_CONTEXT.genGeneratorProcessor(databaseType).genAllTableInfoSql(tableName);
         Statement statement = DataBaseUtil.getConnection().createStatement();
         ResultSet tableResult = statement.executeQuery(tableInfoSql);
         // 构建ClassInfo信息
@@ -88,7 +88,7 @@ public class DataBaseUtil {
         classInfo.setClassComment(className);
         List<FieldInfo> fieldList = new ArrayList<>();
         // 1 column_name, 2 data_type 3 column_comment
-        processTableInfo(tableResult, fieldList);
+        processTableInfo(databaseType, tableResult, fieldList);
         classInfo.setFieldList(fieldList);
         // 设置主键字段
         if (CollectionUtil.isEmpty(fieldList)) {
@@ -101,19 +101,19 @@ public class DataBaseUtil {
         return classInfo;
     }
 
-    private static void processTableInfo(ResultSet tableResult, List<FieldInfo> fieldList) throws SQLException {
-        GENERATE_CONTEXT.genGenerator(PropertiesConfig.getConfig().getDataBaseType())
+    private static void processTableInfo(String databaseType, ResultSet tableResult, List<FieldInfo> fieldList) throws SQLException {
+        GENERATE_CONTEXT.genGeneratorProcessor(databaseType)
                 .processTableInfo(tableResult, fieldList);
     }
 
     /***
      * 根据指定库获取所有表名
      */
-    public static List<String> getAllTableNames() throws SQLException {
+    public static List<String> getAllTableNames(String databaseType) throws SQLException {
         // result
         List<String> result = new ArrayList<>();
         // sql
-        String sql = GENERATE_CONTEXT.genGenerator(PropertiesConfig.getConfig().getDataBaseType()).genAllTables();
+        String sql = GENERATE_CONTEXT.genGeneratorProcessor(databaseType).genAllTables();
         Statement statement = DataBaseUtil.getConnection().createStatement();
         ResultSet rs = statement.executeQuery(sql);
         while (rs.next()) {

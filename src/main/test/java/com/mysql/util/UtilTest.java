@@ -1,6 +1,7 @@
 package java.com.mysql.util;
 
 import com.alibaba.fastjson.JSON;
+import com.generate.bean.PropertiesConfig;
 import com.generate.engine.impl.WebEngine;
 import com.generate.factory.ClassInfoFactory;
 import com.generate.factory.PropertiesFactory;
@@ -36,6 +37,6 @@ public class UtilTest {
 
     @Test
     public void getClassInfoList() {
-        System.out.println(ClassInfoFactory.getClassInfoList());
+        System.out.println(ClassInfoFactory.getClassInfoList(PropertiesConfig.getConfig().getDataBaseType()));
     }
 }

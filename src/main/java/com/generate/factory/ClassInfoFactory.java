@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.generate.bean.ClassInfo;
 import com.generate.bean.ConfigurationInfo;
 import com.generate.bean.PropertiesConfig;
+import com.generate.model.WebEngineConfig;
 import com.generate.util.DataBaseUtil;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class ClassInfoFactory {
 
     private volatile static List<ClassInfo> CLASS_INFO_LIST = new ArrayList<>();
 
-    public static List<ClassInfo> getClassInfoList() {
+    public static List<ClassInfo> getClassInfoList(String databaseType) {
         if (CollectionUtil.isEmpty(CLASS_INFO_LIST)) {
             synchronized (ClassInfoFactory.class) {
                 if (CollectionUtil.isEmpty(CLASS_INFO_LIST)) {
@@ -29,11 +30,11 @@ public class ClassInfoFactory {
                         // 获取配置项
                         ConfigurationInfo config = PropertiesConfig.getConfig();
 
-                        List<String> tableNames = DataBaseUtil.getAllTableNames();
+                        List<String> tableNames = DataBaseUtil.getAllTableNames(databaseType);
                         for (String tableName : tableNames) {
                             // 仅加载 *; 配置项 或者 include包含项才进行处理
                             if("*;".equals(config.getInclude()) || config.getIncludeMap().containsKey(tableName)) {
-                                ClassInfo classInfo = DataBaseUtil.parseClassInfo(tableName);
+                                ClassInfo classInfo = DataBaseUtil.parseClassInfo(databaseType, tableName);
                                 CLASS_INFO_LIST.add(classInfo);
                             }
                         }

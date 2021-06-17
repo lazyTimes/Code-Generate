@@ -1,6 +1,7 @@
 package com.mysql.engine.impl;
 
 import com.generate.bean.ClassInfo;
+import com.generate.bean.PropertiesConfig;
 import com.generate.engine.impl.DefaultEngine;
 import com.generate.factory.ClassInfoFactory;
 import org.junit.Before;
@@ -19,7 +20,7 @@ public class DefaultEngineTest {
 
     @Before
     public void before() {
-        classInfos = ClassInfoFactory.getClassInfoList();
+        classInfos = ClassInfoFactory.getClassInfoList(PropertiesConfig.getConfig().getDataBaseType());
 //        executor = new DefaultEngine(config);
     }
 

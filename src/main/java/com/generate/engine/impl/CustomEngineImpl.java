@@ -44,7 +44,7 @@ public final class CustomEngineImpl {
                 try {
                     // 基于反射构建对象 - 调用handle方法
                     CustomEngine engine = aClass.newInstance();
-                    engine.handle(PropertiesConfig.getConfig(), ClassInfoFactory.getClassInfoList());
+                    engine.handle(PropertiesConfig.getConfig(), ClassInfoFactory.getClassInfoList(PropertiesConfig.getConfig().getDataBaseType()));
                 } catch (InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                 }

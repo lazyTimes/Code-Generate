@@ -27,6 +27,10 @@ import static com.generate.config.SystemConfig.TEMPLATE_BASE_PACKAGE;
  */
 public abstract class AbstractEngine implements GeneralEngine {
 
+    enum buildConfig{
+        SERVICE, CONTROLLER, MAPPER, MODEL, SERVICE_IMPL,
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(AbstractEngine.class);
 
     /***
@@ -41,7 +45,8 @@ public abstract class AbstractEngine implements GeneralEngine {
      */
     @Override
     public void execute() {
-        List<ClassInfo> classInfos = ClassInfoFactory.getClassInfoList();
+        // 默认获取properties中的配置
+        List<ClassInfo> classInfos = ClassInfoFactory.getClassInfoList(PropertiesConfig.getConfig().getDataBaseType());
         for (ClassInfo classInfo : classInfos) {
             genController(classInfo);
             genEntity(classInfo);

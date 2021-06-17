@@ -1,9 +1,8 @@
 package com.generate.controller;
 
-import com.generate.bean.PropertiesConfig;
-import com.generate.bean.WebGenerateConfig;
+import com.generate.bean.GenerateConfigConvert;
 import com.generate.engine.AbstractEngine;
-import com.generate.engine.impl.DefaultEngine;
+import com.generate.engine.impl.WebEngine;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +21,7 @@ public class GenerateController implements GenerateInterface{
     @Override
     @RequestMapping("/generate")
     public Object generateSql(@RequestBody String param) {
-        AbstractEngine engine = new DefaultEngine(WebGenerateConfig.convertAndReturn(param));
+        AbstractEngine engine = new WebEngine(GenerateConfigConvert.convertWebEngineConfig(param));
         engine.execute();
         return null;
     }

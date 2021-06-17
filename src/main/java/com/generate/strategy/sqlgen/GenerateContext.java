@@ -16,7 +16,7 @@ public class GenerateContext {
      * @param dbType 数据库类型
      * @return
      */
-    public DbProcessAble genGenerator(String dbType){
+    public DbProcessAble genGeneratorProcessor(String dbType){
         DbEnum enumOrNullByName = DbEnum.getEnumOrNullByName(dbType);
         if (enumOrNullByName == DbEnum.POSTGRESQL) {
             return new PostgreSqlDbProcess();
