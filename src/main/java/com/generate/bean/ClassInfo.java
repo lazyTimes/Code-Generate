@@ -2,7 +2,9 @@ package com.generate.bean;
 
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ******************************
@@ -52,6 +54,7 @@ public class ClassInfo{
 
     /**
      * 手动指定使用模板
+     * 根据key value的配置获取所需的配置
      */
-    private String template;
+    private Map<String, String> template;
 }

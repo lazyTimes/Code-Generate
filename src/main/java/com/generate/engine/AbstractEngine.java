@@ -51,14 +51,15 @@ public abstract class AbstractEngine implements GeneralEngine {
             genRepositoryClass(classInfo);
             genService(classInfo);
             genRepositoryXml(classInfo);
-            genConfig();
-            genFix();
+            genConfig(classInfo);
+            genFix(classInfo);
         }
-        logger.info(PropertiesConfig.getConfig().getProjectName() + " 构建完成.");
         // 执行自定义拦截接口 执行
-        logger.info("=== 开始构建生成代码文件 ===");
+        logger.info("=== 开始构建自定义组件内容 ===");
         CustomEngineImpl.handleCustom();
-        logger.info("=== 构建生成代码文件完成 ===");
+        logger.info("=== 构建自定义组件完成 ===");
+        logger.info(PropertiesConfig.getConfig().getProjectName() + " 构建完成.");
+        logger.info("代码构建完成");
     }
 
     /**

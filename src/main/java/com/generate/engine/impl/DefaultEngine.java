@@ -1,8 +1,10 @@
 package com.generate.engine.impl;
 
+import cn.hutool.core.map.MapUtil;
 import com.generate.bean.ClassInfo;
 import com.generate.bean.ConfigurationInfo;
 import com.generate.engine.AbstractEngine;
+import com.generate.enums.GenMouduleEnum;
 import com.generate.util.StringUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -56,8 +58,8 @@ public final class DefaultEngine extends AbstractEngine {
         // Example: F:\code\Demo\src\main\java\com\demo\controller\ScriptDirController.java
         String filePath = concat(config.getProjectPath(), SRC_MAIN_JAVA, path, SPACER
                 , parentPackage.replace(".", SPACER), SPACER, classInfo.getClassName(), classSuffix);
-        logger.info("生成文件地址:{}", filePath);
-        processTemplate(classInfo, StringUtils.isNotBlank(classInfo.getTemplate()) ? classInfo.getTemplate() : templateName, filePath);
+
+        processTemplate(classInfo, templateName, filePath);
     }
 
     /***
@@ -68,6 +70,7 @@ public final class DefaultEngine extends AbstractEngine {
      */
     @Override
     protected void processTemplate(ClassInfo classInfo, String templateName, String filePath) {
+        logger.info("生成文件地址:{}", filePath);
         try {
             File file = new File(filePath);
             file.getParentFile().mkdirs();
@@ -102,7 +105,7 @@ public final class DefaultEngine extends AbstractEngine {
     }
 
     @Override
-    public void genFix() {
+    public void genFix(ClassInfo classInfo) {
         // 生成固定文件 ApiResult,PageList,ResultCode
         ClassInfo apiResult = new ClassInfo();
         apiResult.setClassName("ApiResult");
@@ -121,41 +124,51 @@ public final class DefaultEngine extends AbstractEngine {
 
     @Override
     public void genController(ClassInfo classInfo) {
-        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, CONTROLLER), CONTROLLER_FILE_PREFIX, concat("Controller", GENERATE_JAVA_FILE_SUFFIX));
+        String controller = MapUtil.getStr(classInfo.getTemplate(), GenMouduleEnum.CONTROLLER.getKey());
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, getTemplatePath(controller, CONTROLLER)), CONTROLLER_FILE_PREFIX, concat("Controller", GENERATE_JAVA_FILE_SUFFIX));
     }
 
     @Override
     public void genService(ClassInfo classInfo) {
-        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, SERVICE), SERVICE_PARENT_FOLDER, concat("Service", GENERATE_JAVA_FILE_SUFFIX));
-        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, SERVICE_IMPL), SERVICE_IMPL_PARENT_FOLDER, concat("ServiceImpl", GENERATE_JAVA_FILE_SUFFIX));
+        String service = MapUtil.getStr(classInfo.getTemplate(), GenMouduleEnum.SERVICE.getKey());
+        String serviceImpl = MapUtil.getStr(classInfo.getTemplate(), GenMouduleEnum.SERVICEIMPL.getKey());
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, getTemplatePath(service, SERVICE)), SERVICE_PARENT_FOLDER, concat("Service", GENERATE_JAVA_FILE_SUFFIX));
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, getTemplatePath(serviceImpl, SERVICE_IMPL)), SERVICE_IMPL_PARENT_FOLDER, concat("ServiceImpl", GENERATE_JAVA_FILE_SUFFIX));
     }
 
     @Override
     public void genRepositoryClass(ClassInfo classInfo) {
-        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MAPPER), MAPPER_PARENT_FOLDER, concat("Mapper", GENERATE_JAVA_FILE_SUFFIX));
+        String responsitory = MapUtil.getStr(classInfo.getTemplate(), GenMouduleEnum.MAPPER.getKey());
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, getTemplatePath(responsitory, MAPPER)), MAPPER_PARENT_FOLDER, concat("Mapper", GENERATE_JAVA_FILE_SUFFIX));
     }
 
     @Override
     public void genRepositoryXml(ClassInfo classInfo) {
-        // 构建文件地址
-        String rootPath = getRootPath();
-        // Example: C:\Users\Administrator\Desktop\Codes\KerwinBoots\src\main\resources\mapper\ScriptDirMapper.xml
-        String filePath = concat(rootPath, SRC_MAIN_RESOURCE, SPACER, MAPPER_PARENT_FOLDER, SPACER
+        String responsitoryXml = MapUtil.getStr(classInfo.getTemplate(), GenMouduleEnum.MAPPERXML.getKey());
+        String filePath = concat(getRootPath(), SRC_MAIN_RESOURCE, SPACER, MAPPER_PARENT_FOLDER, SPACER
                 , classInfo.getClassName(), MAPPER_XML_SUFFIX);
-        processTemplate(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MAPPER_IMPL), filePath);
-    }
-
-    private String getRootPath() {
-        return concat(config.getRootPath(), SPACER, config.getProjectName());
+        processTemplate(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, getTemplatePath(responsitoryXml, MAPPER_IMPL)), filePath);
     }
 
     @Override
     public void genEntity(ClassInfo classInfo) {
-        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MODEL), ENTITY_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
+        String entity = MapUtil.getStr(classInfo.getTemplate(), GenMouduleEnum.ENTITY.getKey());
+        genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, getTemplatePath(entity, MODEL)), ENTITY_FILE_PREFIX, GENERATE_JAVA_FILE_SUFFIX);
+    }
+
+    /**
+     * 获取模板路径，如果存在参数，则根据参数获取，如果不存在，则根据系统默认配置进行生成
+     *
+     * @param config
+     * @param defualt
+     * @return
+     */
+    private String getTemplatePath(String config, String defualt) {
+        return StringUtils.isNotBlank(config) ? config : defualt;
     }
 
     @Override
-    public void genConfig() {
+    public void genConfig(ClassInfo classInfo) {
         // 构建文件地址
         String rootPath = getRootPath();
         // POM依赖
@@ -172,5 +185,7 @@ public final class DefaultEngine extends AbstractEngine {
         processTemplate(properties, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, APPLICATION_CONFIG), concat(rootPath, SRC_MAIN_RESOURCE, properties.getClassName(), GENERATE_PROPRETIES_FILE_SUFFIX));
     }
 
-
+    private String getRootPath() {
+        return concat(config.getRootPath(), SPACER, config.getProjectName());
+    }
 }

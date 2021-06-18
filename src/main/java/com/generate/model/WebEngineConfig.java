@@ -24,11 +24,6 @@ public class WebEngineConfig {
         private String tableName;
 
         /**
-         * 使用模板名称
-         */
-        private String template;
-
-        /**
          * 查询字段
          */
         private String queryField;
@@ -49,13 +44,6 @@ public class WebEngineConfig {
             this.tableName = tableName;
         }
 
-        public String getTemplate() {
-            return template;
-        }
-
-        public void setTemplate(String template) {
-            this.template = template;
-        }
 
         public String getQueryField() {
             return queryField;
@@ -70,11 +58,11 @@ public class WebEngineConfig {
             return "WebGenrateParam{" +
                     "fields='" + fields + '\'' +
                     ", tableName='" + tableName + '\'' +
-                    ", template='" + template + '\'' +
                     ", queryField='" + queryField + '\'' +
                     '}';
         }
     }
+
     /**
      * Ip
      */
@@ -166,9 +154,22 @@ public class WebEngineConfig {
     private List<WebGenerateParam> webGenerateParams;
 
     /**
+     * 使用模板名称
+     */
+    private Map<String, String> template;
+
+    /**
      * 生成选项
      */
     private List<String> matters;
+
+    public Map<String, String> getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(Map<String, String> template) {
+        this.template = template;
+    }
 
     public List<String> getMatters() {
         return matters;

@@ -4,29 +4,18 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.generate.bean.ClassInfo;
 import com.generate.bean.GenerateConfigConvert;
 import com.generate.bean.PropertiesConfig;
-import com.generate.config.FreeMarkerConfigLoader;
 import com.generate.engine.AbstractEngine;
 import com.generate.enums.GenMouduleEnum;
 import com.generate.factory.ClassInfoFactory;
 import com.generate.model.WebEngineConfig;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.generate.config.SystemConfig.*;
-import static com.generate.config.SystemConfig.FreeMarkerFtlFileConfig.*;
-import static com.generate.config.SystemConfig.FreeMarkerFtlFileConfig.APPLICATION_CONFIG;
+import static com.generate.config.SystemConfig.SPACER;
 import static com.generate.util.FormatUtil.concat;
 
 /**
@@ -42,33 +31,14 @@ public class WebEngine extends AbstractEngine {
 
     private final WebEngineConfig webEngineConfig;
 
-    private final Configuration configuration;
-
     private final DefaultEngine defaultEngine;
 
     public WebEngine(WebEngineConfig webEngineConfig) {
         this.webEngineConfig = Objects.requireNonNull(webEngineConfig);
-        this.configuration = FreeMarkerConfigLoader.loadFreeMarkerVersion2323();
         defaultEngine = new DefaultEngine(GenerateConfigConvert.convertConfigInfo(webEngineConfig));
     }
 
-    /***
-     * 生成Class文件
-     * @param classInfo      ClassInfo
-     * @param templateName   模板地址
-     * @param classSuffix    文件后缀
-     */
-    private void genClass(ClassInfo classInfo, String templateName, String parentPackage, String classSuffix) {
-        // 构建文件地址
-        String path = webEngineConfig.getPackageName().replace(".", SPACER);
-        // Example: F:\code\Demo\src\main\java\com\demo\controller\ScriptDirController.java
-        String filePath = concat(webEngineConfig.getRootPath(), SRC_MAIN_JAVA, path, SPACER
-                , parentPackage.replace(".", SPACER), SPACER, classInfo.getClassName(), classSuffix);
-        logger.info("文件地址:{}", filePath);
-        processTemplate(classInfo, templateName, filePath);
-    }
-
-    /***
+    /**
      * FreeMarker 模板固定方法
      * @param classInfo 类信息
      * @param templateName 模板名称
@@ -82,7 +52,7 @@ public class WebEngine extends AbstractEngine {
     /**
      * 构建ftl模板所需要的参数。如果需要网模板添加参数请通过此方法实现
      *
-     * @param classInfo
+     * @param classInfo 类信息
      * @return
      */
     @Override
@@ -93,11 +63,9 @@ public class WebEngine extends AbstractEngine {
         return result;
     }
 
-
-
     @Override
-    public void genFix() {
-        defaultEngine.genFix();
+    public void genFix(ClassInfo classInfo) {
+        defaultEngine.genFix(classInfo);
     }
 
     @Override
@@ -117,12 +85,7 @@ public class WebEngine extends AbstractEngine {
 
     @Override
     public void genRepositoryXml(ClassInfo classInfo) {
-        // 构建文件地址
-        String rootPath = getRootPath();
-        // Example: C:\Users\Administrator\Desktop\Codes\KerwinBoots\src\main\resources\mapper\ScriptDirMapper.xml
-        String filePath = rootPath + SRC_MAIN_RESOURCE + SPACER + MAPPER_PARENT_FOLDER + SPACER
-                + classInfo.getClassName() + MAPPER_XML_SUFFIX;
-        processTemplate(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, MAPPER_IMPL), filePath);
+        defaultEngine.genRepositoryXml(classInfo);
     }
 
     @Override
@@ -131,21 +94,8 @@ public class WebEngine extends AbstractEngine {
     }
 
     @Override
-    public void genConfig() {
-        // 构建文件地址
-        String rootPath = getRootPath();
-        // POM依赖
-        ClassInfo pom = new ClassInfo();
-        pom.setClassName("pom");
-        processTemplate(pom, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, POM), concat(rootPath, SPACER, pom.getClassName(), GENERATE_XML_FILE_SUFFIX));
-        // logback日志
-        ClassInfo log = new ClassInfo();
-        log.setClassName("logback-spring");
-        processTemplate(log, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, LOGBACK_SPRING), concat(rootPath, SRC_MAIN_RESOURCE, log.getClassName(), GENERATE_XML_FILE_SUFFIX));
-        // 配置文件
-        ClassInfo properties = new ClassInfo();
-        properties.setClassName("application");
-        processTemplate(properties, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, APPLICATION_CONFIG), concat(rootPath, SRC_MAIN_RESOURCE, properties.getClassName(), GENERATE_PROPRETIES_FILE_SUFFIX));
+    public void genConfig(ClassInfo classInfo) {
+        defaultEngine.genConfig(classInfo);
     }
 
     private String getRootPath() {
@@ -185,18 +135,21 @@ public class WebEngine extends AbstractEngine {
             }
             if(collect.contains(GenMouduleEnum.CONFIG.getKey())){
                 logger.info("=== 开始生成{}模块 ===", GenMouduleEnum.CONFIG.getKey());
-                genConfig();
+                genConfig(classInfo);
             }
             if(collect.contains(GenMouduleEnum.FIX.getKey())){
                 logger.info("=== 开始生成{}模块 ===", GenMouduleEnum.FIX.getKey());
-                genFix();
+                genFix(classInfo);
             }
         }
+        if(collect.contains(GenMouduleEnum.CUSTOM.getKey())){
+            // 执行自定义拦截接口 执行
+            logger.info("=== 开始构建自定义组件内容 ===");
+            CustomEngineImpl.handleCustom();
+            logger.info("=== 构建自定义组件完成 ===");
+        }
         logger.info(PropertiesConfig.getConfig().getProjectName() + " 构建完成.");
-        // 执行自定义拦截接口 执行
-        logger.info("=== 开始构建生成代码文件 ===");
-        CustomEngineImpl.handleCustom();
-        logger.info("=== 构建生成代码文件完成 ===");
+        logger.info("代码构建完成");
     }
 
     /**

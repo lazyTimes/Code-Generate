@@ -40,7 +40,7 @@ public class DataMdImpl implements CustomEngine {
             e.printStackTrace();
         }
 
-        logger.info("=== Data Sql Md Part Build Complete.=== ");
+        logger.info("生成文件地址: {}", filePath);
     }
 
     private static final String SRC_MAIN_RESOURCE = concat(SystemConfig.SPACER, "src", SystemConfig.SPACER, "main", SystemConfig.SPACER, "resources" + SystemConfig.SPACER);

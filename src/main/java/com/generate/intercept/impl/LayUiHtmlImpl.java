@@ -68,7 +68,7 @@ public class LayUiHtmlImpl implements CustomEngine {
             }
         }
 
-        logger.info("=== LayUi Html Part Build Complete. ===");
+        logger.info("生成文件地址：{}/code-generator/layui-html/page-file", config.getProjectPath());
     }
 
     private void copyCommonFiles (ConfigurationInfo config) {

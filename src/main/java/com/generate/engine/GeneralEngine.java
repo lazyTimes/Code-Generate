@@ -20,7 +20,7 @@ public interface GeneralEngine {
     /**
      * 生成固有的文件
      */
-    void genFix();
+    void genFix(ClassInfo classInfo);
 
     /**
      * 生成控制层 GeneralEngine
@@ -50,5 +50,5 @@ public interface GeneralEngine {
     /**
      * 生成配置文件(包括pom.xml,application.yml,application.properties)
      */
-    void genConfig();
+    void genConfig(ClassInfo classInfo);
 }

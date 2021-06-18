@@ -4,6 +4,7 @@ import com.generate.bean.ClassInfo;
 import com.generate.bean.PropertiesConfig;
 import com.generate.engine.impl.DefaultEngine;
 import com.generate.factory.ClassInfoFactory;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,8 +26,8 @@ public class DefaultEngineTest {
     }
 
     @Test
-    public void genFix() {
-        executor.genFix();
+    public void genFix(ClassInfo classInfo) {
+        executor.genFix(classInfo);
     }
 
     @Test
@@ -70,6 +71,6 @@ public class DefaultEngineTest {
 
     @Test
     public void genConfig() {
-        executor.genConfig();
+//        executor.genConfig(classInfos);
     }
 }

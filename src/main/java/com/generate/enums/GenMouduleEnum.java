@@ -9,14 +9,16 @@ package com.generate.enums;
  **/
 public enum GenMouduleEnum {
     SERVICE("service", "service"),
+    SERVICEIMPL("serviceimpl", "serviceimpl"),
     CONTROLLER("controller", "controller"),
     ENTITY("entity", "entity"),
     MAPPER("mapper", "mapper"),
     MAPPERXML("mapperxml", "mapperxml"),
     CONFIG("config", "config"),
     FIX("fix", "fix"),
+    // 自定义模块
+    CUSTOM("custom", "custom"),
     ;
-
 
     private final String key;
     private final String value;
@@ -25,7 +27,6 @@ public enum GenMouduleEnum {
         this.key = key;
         this.value = value;
     }
-
 
     public String getKey() {
         return key;

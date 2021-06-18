@@ -35,8 +35,8 @@ public class ClassInfoFactory {
     /**
      * 用于properties静态配置读取使用，初次加载放入缓存
      *
-     * @param databaseType
-     * @param configurationInfo
+     * @param databaseType 数据库类型
+     * @param configurationInfo web请求参数对象
      * @return
      */
     public static List<ClassInfo> getClassInfoList(String databaseType, ConfigurationInfo configurationInfo) {
@@ -60,12 +60,13 @@ public class ClassInfoFactory {
 
     /**
      * 根据web请求参数生成指定的表
-     * @param databaseType
-     * @param webEngineConfig
+     *
+     * @param databaseType    数据库类型
+     * @param webEngineConfig web请求参数实体对象
      * @return
      */
     public static List<ClassInfo> getClassInfoList(String databaseType, WebEngineConfig webEngineConfig) {
-        if(CollectionUtil.isEmpty(webEngineConfig.getWebGenerateParams())){
+        if (CollectionUtil.isEmpty(webEngineConfig.getWebGenerateParams())) {
             return Collections.emptyList();
         }
         List<ClassInfo> result = new ArrayList<>();
@@ -87,7 +88,7 @@ public class ClassInfoFactory {
                     if (tableName.equals(webGenerateParam.getTableName())) {
                         ClassInfo classInfo = DataBaseUtil.parseClassInfo(databaseType, tableName);
                         classInfo.setQueryFields(webGenerateParam.getFields());
-                        classInfo.setTemplate(webGenerateParam.getTemplate());
+                        classInfo.setTemplate(webEngineConfig.getTemplate());
                         result.add(classInfo);
                         break;
                     }
