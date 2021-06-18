@@ -37,6 +37,6 @@ public class UtilTest {
 
     @Test
     public void getClassInfoList() {
-        System.out.println(ClassInfoFactory.getClassInfoList(PropertiesConfig.getConfig().getDataBaseType()));
+//        System.out.println(ClassInfoFactory.getClassInfoList(PropertiesConfig.getConfig().getDataBaseType()));
     }
 }

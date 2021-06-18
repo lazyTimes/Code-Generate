@@ -13,7 +13,7 @@ import java.util.List;
  * ******************************
  */
 @Data
-public class ClassInfo {
+public class ClassInfo{
 
     /***
      * 表名
@@ -44,4 +44,14 @@ public class ClassInfo {
      * 持有字段
      */
     private List<FieldInfo> fieldList;
+
+    /**
+     * 查询字段
+     */
+    private String queryFields;
+
+    /**
+     * 手动指定使用模板
+     */
+    private String template;
 }

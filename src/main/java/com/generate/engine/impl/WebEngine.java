@@ -76,33 +76,24 @@ public class WebEngine extends AbstractEngine {
      */
     @Override
     protected void processTemplate(ClassInfo classInfo, String templateName, String filePath) {
-        try {
-            File file = new File(filePath);
-            file.getParentFile().mkdirs();
-            Writer writer = new FileWriter(new File(filePath));
-            // 获取生成的模板文件名称
-            Template template = getTemplate(templateName);
-            Map<String, Object> params = new HashMap<>(16);
-            params.put("classInfo", classInfo);
-            params.put("authorName", webEngineConfig.getAuthorName());
-            params.put("packageName", webEngineConfig.getPackageName());
-            params.put("projectName", webEngineConfig.getProjectName());
-            params.put("genConfig", webEngineConfig);
-            template.process(params, writer);
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            logger.error("文件读写异常，异常原因为:{}", e.getLocalizedMessage());
-            e.printStackTrace();
-        } catch (TemplateException e) {
-            logger.error("没有找到对应的模板文件，异常原因为:{}", e.getLocalizedMessage());
-            e.printStackTrace();
-        }
+        defaultEngine.processTemplate(classInfo, templateName, filePath);
     }
 
-    private Template getTemplate(String templateName) throws IOException {
-        return configuration.getTemplate(templateName);
+    /**
+     * 构建ftl模板所需要的参数。如果需要网模板添加参数请通过此方法实现
+     *
+     * @param classInfo
+     * @return
+     */
+    @Override
+    protected Map<String, Object> genTemplateParam(ClassInfo classInfo) {
+        Map<String, Object> result = defaultEngine.genTemplateParam(classInfo);
+        // 生成配置覆盖为自定义对象配置
+        result.put("genConfig", webEngineConfig);
+        return result;
     }
+
+
 
     @Override
     public void genFix() {
@@ -173,31 +164,31 @@ public class WebEngine extends AbstractEngine {
         // 根据不同的选项要有校验操作 根据枚举：GenMouduleEnum
         for (ClassInfo classInfo : classInfos) {
             if(collect.contains(GenMouduleEnum.CONTROLLER.getKey())){
-                logger.info("开始生成{}模块", GenMouduleEnum.CONTROLLER.getKey());
+                logger.info("=== 开始生成{}模块 ===", GenMouduleEnum.CONTROLLER.getKey());
                 genController(classInfo);
             }
             if(collect.contains(GenMouduleEnum.ENTITY.getKey())){
-                logger.info("开始生成{}模块", GenMouduleEnum.ENTITY.getKey());
+                logger.info("=== 开始生成{}模块 ===", GenMouduleEnum.ENTITY.getKey());
                 genEntity(classInfo);
             }
             if(collect.contains(GenMouduleEnum.MAPPER.getKey())){
-                logger.info("开始生成{}模块", GenMouduleEnum.MAPPER.getKey());
+                logger.info("=== 开始生成{}模块 ===", GenMouduleEnum.MAPPER.getKey());
                 genRepositoryClass(classInfo);
             }
             if(collect.contains(GenMouduleEnum.SERVICE.getKey())){
-                logger.info("开始生成{}模块", GenMouduleEnum.SERVICE.getKey());
+                logger.info("=== 开始生成{}模块 ===", GenMouduleEnum.SERVICE.getKey());
                 genService(classInfo);
             }
             if(collect.contains(GenMouduleEnum.MAPPERXML.getKey())){
-                logger.info("开始生成{}模块", GenMouduleEnum.MAPPERXML.getKey());
+                logger.info("=== 开始生成{}模块 ===", GenMouduleEnum.MAPPERXML.getKey());
                 genRepositoryXml(classInfo);
             }
             if(collect.contains(GenMouduleEnum.CONFIG.getKey())){
-                logger.info("开始生成{}模块", GenMouduleEnum.CONFIG.getKey());
+                logger.info("=== 开始生成{}模块 ===", GenMouduleEnum.CONFIG.getKey());
                 genConfig();
             }
             if(collect.contains(GenMouduleEnum.FIX.getKey())){
-                logger.info("开始生成{}模块", GenMouduleEnum.FIX.getKey());
+                logger.info("=== 开始生成{}模块 ===", GenMouduleEnum.FIX.getKey());
                 genFix();
             }
         }
@@ -205,6 +196,7 @@ public class WebEngine extends AbstractEngine {
         // 执行自定义拦截接口 执行
         logger.info("=== 开始构建生成代码文件 ===");
         CustomEngineImpl.handleCustom();
+        logger.info("=== 构建生成代码文件完成 ===");
     }
 
     /**

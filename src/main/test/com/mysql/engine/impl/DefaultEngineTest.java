@@ -20,7 +20,7 @@ public class DefaultEngineTest {
 
     @Before
     public void before() {
-        classInfos = ClassInfoFactory.getClassInfoList(PropertiesConfig.getConfig().getDataBaseType());
+//        classInfos = ClassInfoFactory.getClassInfoList(PropertiesConfig.getConfig().getDataBaseType());
 //        executor = new DefaultEngine(config);
     }
 

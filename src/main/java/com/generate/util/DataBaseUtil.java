@@ -5,6 +5,7 @@ import com.generate.bean.ClassInfo;
 import com.generate.bean.ConfigurationInfo;
 import com.generate.bean.FieldInfo;
 import com.generate.bean.PropertiesConfig;
+import com.generate.model.WebEngineConfig;
 import com.generate.strategy.sqlgen.GenerateContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,7 @@ public class DataBaseUtil {
 
     /**
      * 创建DB连接URL，根据系统和枚举配置
+     *
      * @return
      * @throws Exception
      */
@@ -52,7 +54,7 @@ public class DataBaseUtil {
     /***
      * 获取数据库连接,双重校验保证线程安全
      */
-    public static Connection getConnection(){
+    public static Connection getConnection() {
         try {
             if (null == conn) {
                 synchronized (DataBaseUtil.class) {
@@ -121,8 +123,6 @@ public class DataBaseUtil {
         }
         return result;
     }
-
-
 
 
 }

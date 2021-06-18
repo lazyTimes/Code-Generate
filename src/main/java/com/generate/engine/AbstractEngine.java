@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.generate.config.SystemConfig.TEMPLATE_BASE_PACKAGE;
 
@@ -57,14 +58,22 @@ public abstract class AbstractEngine implements GeneralEngine {
         // 执行自定义拦截接口 执行
         logger.info("=== 开始构建生成代码文件 ===");
         CustomEngineImpl.handleCustom();
+        logger.info("=== 构建生成代码文件完成 ===");
     }
 
     /**
-     * 处理模板参数内容
+     * 统一模板处理方法
      *
      * @param classInfo    类信息
      * @param templateName 模板名称
      * @param filePath     文件路径
      */
     protected abstract void processTemplate(ClassInfo classInfo, String templateName, String filePath);
+
+    /**
+     * 处理模板参数的方法
+     * @param classInfo
+     * @return
+     */
+    protected abstract Map<String, Object> genTemplateParam(ClassInfo classInfo);
 }

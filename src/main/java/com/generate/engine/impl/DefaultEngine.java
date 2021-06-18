@@ -3,9 +3,11 @@ package com.generate.engine.impl;
 import com.generate.bean.ClassInfo;
 import com.generate.bean.ConfigurationInfo;
 import com.generate.engine.AbstractEngine;
+import com.generate.util.StringUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +57,7 @@ public final class DefaultEngine extends AbstractEngine {
         String filePath = concat(config.getProjectPath(), SRC_MAIN_JAVA, path, SPACER
                 , parentPackage.replace(".", SPACER), SPACER, classInfo.getClassName(), classSuffix);
         logger.info("生成文件地址:{}", filePath);
-        processTemplate(classInfo, templateName, filePath);
+        processTemplate(classInfo, StringUtils.isNotBlank(classInfo.getTemplate()) ? classInfo.getTemplate() : templateName, filePath);
     }
 
     /***
@@ -64,25 +66,39 @@ public final class DefaultEngine extends AbstractEngine {
      * @param templateName
      * @param filePath
      */
+    @Override
     protected void processTemplate(ClassInfo classInfo, String templateName, String filePath) {
         try {
             File file = new File(filePath);
             file.getParentFile().mkdirs();
             Writer writer = new FileWriter(new File(filePath));
-            Template template = configuration.getTemplate(templateName);
-            Map<String, Object> params = new HashMap<>(16);
-            params.put("classInfo", classInfo);
-            params.put("authorName", config.getAuthorName());
-            params.put("packageName", config.getPackageName());
-            params.put("projectName", config.getProjectName());
-            params.put("genConfig", config);
-            template.process(params, writer);
+            // 获取生成的模板文件名称
+            Template template = getTemplate(templateName);
+            template.process(genTemplateParam(classInfo), writer);
             writer.flush();
             writer.close();
-        } catch (IOException | TemplateException e) {
+        } catch (IOException e) {
+            logger.error("文件读写异常，异常原因为:{}", e.getLocalizedMessage());
             e.printStackTrace();
-            logger.error("生成模板失败，失败原因为:{}", e.getLocalizedMessage());
+        } catch (TemplateException e) {
+            logger.error("没有找到对应的模板文件，异常原因为:{}", e.getLocalizedMessage());
+            e.printStackTrace();
         }
+    }
+
+    private Template getTemplate(String templateName) throws IOException {
+        return configuration.getTemplate(templateName);
+    }
+
+    @Override
+    protected Map<String, Object> genTemplateParam(ClassInfo classInfo) {
+        Map<String, Object> params = new HashMap<>(16);
+        params.put("classInfo", classInfo);
+        params.put("authorName", config.getAuthorName());
+        params.put("packageName", config.getPackageName());
+        params.put("projectName", config.getProjectName());
+        params.put("genConfig", config);
+        return params;
     }
 
     @Override

@@ -65,9 +65,12 @@ public class ClassInfoFactory {
      * @return
      */
     public static List<ClassInfo> getClassInfoList(String databaseType, WebEngineConfig webEngineConfig) {
+        if(CollectionUtil.isEmpty(webEngineConfig.getWebGenerateParams())){
+            return Collections.emptyList();
+        }
         List<ClassInfo> result = new ArrayList<>();
         try {
-            List<WebEngineConfig.WebGenerateParam> webGenerateParams = Objects.requireNonNull(webEngineConfig.getWebGenerateParams());
+            List<WebEngineConfig.WebGenerateParam> webGenerateParams = webEngineConfig.getWebGenerateParams();
             // 获取配置项
             List<String> tableNames = DataBaseUtil.getAllTableNames(databaseType);
             if (MATCH_ALL_MARK.equals(webEngineConfig.getInclude())) {
@@ -78,14 +81,13 @@ public class ClassInfoFactory {
                 }
                 return result;
             }
-            if(CollectionUtil.isEmpty(webGenerateParams)){
-                return Collections.emptyList();
-            }
             // 根据请求参数匹配对应的表
             for (WebEngineConfig.WebGenerateParam webGenerateParam : webGenerateParams) {
                 for (String tableName : tableNames) {
                     if (tableName.equals(webGenerateParam.getTableName())) {
                         ClassInfo classInfo = DataBaseUtil.parseClassInfo(databaseType, tableName);
+                        classInfo.setQueryFields(webGenerateParam.getFields());
+                        classInfo.setTemplate(webGenerateParam.getTemplate());
                         result.add(classInfo);
                         break;
                     }
@@ -93,6 +95,7 @@ public class ClassInfoFactory {
             }
         } catch (Exception e) {
             logger.error("获取class信息列表失败，失败原因为：{}", e.getLocalizedMessage());
+            e.printStackTrace();
         }
         return result;
     }
