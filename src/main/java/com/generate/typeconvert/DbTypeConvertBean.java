@@ -29,7 +29,6 @@ public class DbTypeConvertBean implements DbTypeConvert {
 
         private static final Map<String, String> MYSQL_TYPE_MAPPING = new HashMap<>(48);
 
-        // todo: mysql设置对应的数据库配置。由于不同的数据库属性可能不一样，需要区别对待
         static {
             // ===================== mysql ===================== //
             MYSQL_TYPE_MAPPING.put("int", "Integer");
@@ -61,7 +60,6 @@ public class DbTypeConvertBean implements DbTypeConvert {
         }
     }
 
-    // TODO： 扩展 oracle
     public static class Oracle {
     }
 

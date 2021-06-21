@@ -91,7 +91,7 @@ layui.define(["element", "jquery"], function (exports) {
                 sessionStorage.setItem("layuiminiTabInfo", JSON.stringify(layuiminiTabInfo))
             }
 
-            // todo 未知BUG，不知道是不是layui问题，必须先删除元素
+            // 未知BUG，不知道是不是layui问题，必须先删除元素
             $(".layuimini-tab .layui-tab-title .layui-unselect.layui-tab-bar").remove();
 
             if (isParent === true) {
