@@ -87,7 +87,8 @@ public class ClassInfoFactory {
                 for (String tableName : tableNames) {
                     if (tableName.equals(webGenerateParam.getTableName())) {
                         ClassInfo classInfo = DataBaseUtil.parseClassInfo(databaseType, tableName);
-                        classInfo.setQueryFields(webGenerateParam.getFields());
+                        classInfo.setQueryFields(webGenerateParam.getQueryField());
+                        classInfo.setFields(webGenerateParam.getFields());
                         classInfo.setTemplate(webEngineConfig.getTemplate());
                         result.add(classInfo);
                         break;

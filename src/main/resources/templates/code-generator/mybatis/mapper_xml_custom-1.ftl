@@ -12,10 +12,12 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+        <#if classInfo.fieldList?? && classInfo.fieldList?size gt 0 && !classInfo.fields??>
         <#list classInfo.fieldList as fieldItem >
         `${fieldItem.columnName}`<#if fieldItem_has_next>,</#if>
         </#list>
+        <#else >
+            ${classInfo.fields}
         </#if>
     </sql>
 
@@ -36,9 +38,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
             <#list classInfo.fieldList as fieldItem >
-                    ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
-                    ${r"#{"}${fieldItem.fieldName}${r"}"}<#if fieldItem_has_next>,</#if>
-                    ${r"</if>"}
+            ${r"<if test ='null != "}${fieldItem.fieldName}${r"'>"}
+                ${r"#{"}${fieldItem.fieldName}${r"}"}<#if fieldItem_has_next>,</#if>
+            ${r"</if>"}
             </#list>
             </#if>
         </trim>
@@ -46,7 +48,11 @@
 
     <!-- 批量插入数据 -->
     <insert id="batchInsert" parameterType="java.util.List">
-        INSERT INTO ${classInfo.tableName} ( <include refid="Base_Column_List" /> ) VALUES
+        INSERT INTO ${classInfo.tableName}
+        (
+        <#list classInfo.fieldList as fieldItem >${fieldItem.fieldName}<#sep>, </#list>
+        )
+        VALUES
         <foreach collection="list" item="curr" index="index" separator=",">
             (
             <#list classInfo.fieldList as fieldItem >
@@ -94,7 +100,7 @@
 
     <!-- 条件查询 -->
     <select id="selectList" resultMap="BaseResultMap">
-        SELECT ${classInfo.queryFields}
+        SELECT ${classInfo.fields}
         FROM ${classInfo.tableName}
         <where>
         <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
@@ -124,7 +130,7 @@
 
     <!-- 分页条件查询 -->
     <select id="selectPage" resultMap="BaseResultMap">
-        SELECT ${classInfo.queryFields}
+        SELECT ${classInfo.fields}
         FROM ${classInfo.tableName}
         <where>
             <#if classInfo.fieldList?? && classInfo.fieldList?size gt 0>

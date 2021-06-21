@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.generate.config.SystemConfig.*;
+import static com.generate.util.FormatUtil.concat;
+
 /**
  * ******************************
  * author：      柯贤铭
@@ -23,6 +26,10 @@ import java.util.Map;
  * ******************************
  */
 public class LayUiHtmlImpl implements CustomEngine {
+
+
+    private static Logger logger = LoggerFactory.getLogger(LayUiHtmlImpl.class);
+
     @Override
     public void handle(ConfigurationInfo config, List<ClassInfo> classInfos) {
         // 复制公有文件
@@ -30,20 +37,20 @@ public class LayUiHtmlImpl implements CustomEngine {
 
         // 参数
         Map<String, Object> params = new HashMap<>();
-        params.put("config"    , config);
+        params.put("config", config);
         params.put("classInfos", classInfos);
 
         // 处理需要复制的config.js init.json
-        String configJs    = config.getProjectPath() + STATIC + SystemConfig.SPACER + "api"  + SystemConfig.SPACER + "config.js";
-        String initJson    = config.getProjectPath() + STATIC + SystemConfig.SPACER + "api"  + SystemConfig.SPACER + "init.json";
-        String welcomeHtml = config.getProjectPath() + STATIC + SystemConfig.SPACER + "page" + SystemConfig.SPACER + "welcome.html";
-        String indexHtml   = config.getProjectPath() + STATIC + SystemConfig.SPACER + "index.html";
+        String configJs = concat(config.getProjectPath(), SystemConfig.STATIC, SystemConfig.SPACER, "api", SystemConfig.SPACER, "config.js");
+        String initJson = concat(config.getProjectPath(), SystemConfig.STATIC, SystemConfig.SPACER, "api", SystemConfig.SPACER, "init.json");
+        String welcomeHtml = concat(config.getProjectPath(), SystemConfig.STATIC, SystemConfig.SPACER, "page", SystemConfig.SPACER, "welcome.html");
+        String indexHtml = concat(config.getProjectPath(), SystemConfig.STATIC, SystemConfig.SPACER, "index.html");
 
         try {
-            this.execute(params, "code-generator/layui-html/api/config.ftl"       , configJs);
-            this.execute(params, "code-generator/layui-html/api/init.ftl"         , initJson);
-            this.execute(params, "code-generator/layui-html/page-file/welcome.ftl", welcomeHtml);
-            this.execute(params, "code-generator/layui-html/index.ftl"            , indexHtml);
+            this.execute(params, concat(CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/api/config.ftl"), configJs);
+            this.execute(params, concat(CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/api/init.ftl"), initJson);
+            this.execute(params, concat(CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/page-file/welcome.ftl"), welcomeHtml);
+            this.execute(params, concat(CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/index.ftl"), indexHtml);
         } catch (IOException | TemplateException e) {
             e.printStackTrace();
         }
@@ -54,49 +61,56 @@ public class LayUiHtmlImpl implements CustomEngine {
             // 类参数
             params.put("classInfo", info);
 
-            String table = config.getProjectPath() + STATIC + SystemConfig.SPACER + "page" + SystemConfig.SPACER + info.getClassName() + "-table.html";
-            String add   = config.getProjectPath() + STATIC + SystemConfig.SPACER + "page" + SystemConfig.SPACER + info.getClassName() + "-add.html";
-            String edit  = config.getProjectPath() + STATIC + SystemConfig.SPACER + "page" + SystemConfig.SPACER + info.getClassName() + "-edit.html";
-            String see   = config.getProjectPath() + STATIC + SystemConfig.SPACER + "page" + SystemConfig.SPACER + info.getClassName() + "-see.html";
+            String table = concat(config.getProjectPath(), SystemConfig.STATIC, SystemConfig.SPACER, "page", SystemConfig.SPACER, info.getClassName(), "-table.html");
+            String add = concat(config.getProjectPath(), SystemConfig.STATIC, SystemConfig.SPACER, "page", SystemConfig.SPACER, info.getClassName(), "-add.html");
+            String edit = concat(config.getProjectPath(), SystemConfig.STATIC, SystemConfig.SPACER, "page", SystemConfig.SPACER, info.getClassName(), "-edit.html");
+            String see = concat(config.getProjectPath(), SystemConfig.STATIC, SystemConfig.SPACER, "page", SystemConfig.SPACER, info.getClassName(), "-see.html");
             try {
-                this.execute(params, "code-generator/layui-html/page-file/table.ftl" , table);
-                this.execute(params, "code-generator/layui-html/page-file/add.ftl"   , add);
-                this.execute(params, "code-generator/layui-html/page-file/edit.ftl"  , edit);
-                this.execute(params, "code-generator/layui-html/page-file/see.ftl"   , see);
+                this.execute(params, concat(CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/page-file/table.ftl"), table);
+                this.execute(params, concat(CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/page-file/add.ftl"), add);
+                this.execute(params, concat(CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/page-file/edit.ftl"), edit);
+                this.execute(params, concat(CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/page-file/see.ftl"), see);
             } catch (IOException | TemplateException e) {
                 e.printStackTrace();
             }
         }
 
-        logger.info("生成文件地址：{}/code-generator/layui-html/page-file", config.getProjectPath());
+        logger.info("生成文件地址：{}/{}/{}/page-file", config.getProjectPath(), CODE_GENERATE_FILE_PREFIX, LAYUI_HTML_FILE_PREFIX);
     }
 
-    private void copyCommonFiles (ConfigurationInfo config) {
+    private void copyCommonFiles(ConfigurationInfo config) {
         try {
             // 复制 css, images, js, lib
-            IOTools.loadRecourseFromJarByFolder("/templates/code-generator/layui-html/css",
-                    config.getProjectPath() + STATIC, this.getClass(),
-                    "/templates/code-generator/layui-html/css");
+            String css = concat(TEMPLATE_BASE_PACKAGE, CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/css");
+            IOTools.loadRecourseFromJarByFolder(
+                    css,
+                    concat(config.getProjectPath(), SystemConfig.STATIC),
+                    this.getClass(),
+                    css);
 
-            IOTools.loadRecourseFromJarByFolder("/templates/code-generator/layui-html/images",
-                    config.getProjectPath() + STATIC, this.getClass(),
-                    "/templates/code-generator/layui-html/images");
+            String images = concat(TEMPLATE_BASE_PACKAGE, CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/images");
+            IOTools.loadRecourseFromJarByFolder(
+                    images,
+                    concat(config.getProjectPath(), SystemConfig.STATIC),
+                    this.getClass(),
+                    images);
 
-            IOTools.loadRecourseFromJarByFolder("/templates/code-generator/layui-html/js",
-                    config.getProjectPath() + STATIC, this.getClass(),
-                    "/templates/code-generator/layui-html/js");
+            String js = concat(TEMPLATE_BASE_PACKAGE, CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/js");
+            IOTools.loadRecourseFromJarByFolder(
+                    images,
+                    concat(config.getProjectPath(), SystemConfig.STATIC),
+                    this.getClass(),
+                    images);
 
-            IOTools.loadRecourseFromJarByFolder("/templates/code-generator/layui-html/lib",
-                    config.getProjectPath() + STATIC, this.getClass(),
-                    "/templates/code-generator/layui-html/lib");
+            String lib = concat(TEMPLATE_BASE_PACKAGE, CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/lib");
+            IOTools.loadRecourseFromJarByFolder(
+                    lib,
+                    concat(config.getProjectPath(), SystemConfig.STATIC),
+                    this.getClass(),
+                    lib);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static final String SRC_MAIN_RESOURCE = SystemConfig.SPACER + "src" + SystemConfig.SPACER + "main" + SystemConfig.SPACER + "resources" + SystemConfig.SPACER;
-
-    private static final String STATIC = SRC_MAIN_RESOURCE + SystemConfig.SPACER + "static" + SystemConfig.SPACER;
-
-    private static Logger logger = LoggerFactory.getLogger(LayUiHtmlImpl.class);
 }

@@ -21,7 +21,7 @@ public final class SystemConfig {
     /** 生成具体文件的XML文件后缀名 */
     public static final String GENERATE_XML_FILE_SUFFIX = ".xml";
     /** 生成具体文件的Properties文件后缀名 */
-    public static final String GENERATE_PROPRETIES_FILE_SUFFIX = ".xml";
+    public static final String GENERATE_PROPRETIES_FILE_SUFFIX = ".properties";
     /** 模板文件存放地址的通用前缀 */
     public static final String CODE_GENERATE_FILE_PREFIX = "code-generator";
     /** layui 文件地址前缀 */
@@ -48,6 +48,8 @@ public final class SystemConfig {
     public static final String SRC_MAIN_JAVA = SPACER + "src" + SPACER + "main" + SPACER + "java" + SPACER;
      /**  RESOURCE地址 */
     public static final String SRC_MAIN_RESOURCE = SPACER + "src" + SPACER + "main" + SPACER + "resources" + SPACER;
+     /**  STATIC 地址 */
+     public static final String STATIC = SRC_MAIN_RESOURCE + SystemConfig.SPACER + "static" + SystemConfig.SPACER;
     /** 系统自定规则，代表获取所有的表或者获取所有的信息等 */
     public static final String MATCH_ALL_MARK = "*;";
     /**

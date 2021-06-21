@@ -53,6 +53,12 @@ public class ClassInfo{
     private String queryFields;
 
     /**
+     * 查询列，指定查询列将只生成查询列的相关信息
+     * 否则按照表所有字段进行生成
+     */
+    private String fields;
+
+    /**
      * 手动指定使用模板
      * 根据key value的配置获取所需的配置
      */
