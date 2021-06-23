@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.generate.config.SystemConfig.SPACER;
+import static com.generate.config.SystemConfig.*;
+import static com.generate.config.SystemConfig.FreeMarkerFtlFileConfig.API_RESULT;
+import static com.generate.config.SystemConfig.FreeMarkerFtlFileConfig.CONTROLLER;
 import static com.generate.util.FormatUtil.concat;
 
 /**
@@ -98,8 +100,9 @@ public class WebEngine extends AbstractEngine {
         defaultEngine.genConfig(classInfo);
     }
 
-    private String getRootPath() {
-        return concat(webEngineConfig.getRootPath(), SPACER, webEngineConfig.getProjectName());
+    @Override
+    public void genVue(ClassInfo classInfo) {
+        defaultEngine.genClass(classInfo, concat(CODE_GENERATE_FILE_PREFIX, SPACER, BACK_FILE_PREFIX, SPACER, "table.ftl"), COMMON_FILE_PREFIX, ".vue");
     }
 
     @Override
@@ -140,6 +143,10 @@ public class WebEngine extends AbstractEngine {
             if(collect.contains(GenMouduleEnum.FIX.getKey())){
                 logger.info("=== 开始生成{}模块 ===", GenMouduleEnum.FIX.getKey());
                 genFix(classInfo);
+            }
+            if(collect.contains(GenMouduleEnum.VUE.getKey())){
+                logger.info("=== 开始生成{}模块 ===", GenMouduleEnum.VUE.getKey());
+                genVue(classInfo);
             }
         }
         if(collect.contains(GenMouduleEnum.CUSTOM.getKey())){

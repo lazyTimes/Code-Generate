@@ -52,7 +52,7 @@ public final class DefaultEngine extends AbstractEngine {
      * @param templateName   模板地址
      * @param classSuffix    文件后缀
      */
-    private void genClass(ClassInfo classInfo, String templateName, String parentPackage, String classSuffix) {
+    void genClass(ClassInfo classInfo, String templateName, String parentPackage, String classSuffix) {
         // 构建文件地址
         String path = config.getPackageName().replace(".", SPACER);
         // Example: F:\code\Demo\src\main\java\com\demo\controller\ScriptDirController.java
@@ -61,6 +61,7 @@ public final class DefaultEngine extends AbstractEngine {
 
         processTemplate(classInfo, templateName, filePath);
     }
+
 
     /***
      * 处理模板的参数固定方法，默认使用此配置，子类可以重写此部分内容
@@ -183,6 +184,11 @@ public final class DefaultEngine extends AbstractEngine {
         ClassInfo properties = new ClassInfo();
         properties.setClassName("application");
         processTemplate(properties, concat(CODE_GENERATE_FILE_PREFIX, SPACER, COMMON_FILE_PREFIX, SPACER, APPLICATION_CONFIG), concat(rootPath, SRC_MAIN_RESOURCE, properties.getClassName(), GENERATE_PROPRETIES_FILE_SUFFIX));
+    }
+
+    @Override
+    public void genVue(ClassInfo classInfo) {
+        throw new UnsupportedOperationException("不支持生成当前模板");
     }
 
     private String getRootPath() {

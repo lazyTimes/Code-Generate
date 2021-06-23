@@ -16,6 +16,7 @@ public enum GenMouduleEnum {
     MAPPERXML("mapperxml", "mapperxml"),
     CONFIG("config", "config"),
     FIX("fix", "fix"),
+    VUE("vue", "vue"),
     // 自定义模块
     CUSTOM("custom", "custom"),
     ;
