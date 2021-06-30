@@ -36,5 +36,5 @@ public interface DbProcessAble {
      * @param fieldList
      * @throws SQLException
      */
-    void processTableInfo(ResultSet tableResult, List<FieldInfo> fieldList) throws SQLException;
+    void processTableInfo(String databaseType, ResultSet tableResult, List<FieldInfo> fieldList) throws SQLException;
 }

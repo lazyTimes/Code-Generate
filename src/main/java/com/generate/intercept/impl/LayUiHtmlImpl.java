@@ -97,10 +97,10 @@ public class LayUiHtmlImpl implements CustomEngine {
 
             String js = concat(TEMPLATE_BASE_PACKAGE, CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/js");
             IOTools.loadRecourseFromJarByFolder(
-                    images,
+                    js,
                     concat(config.getProjectPath(), SystemConfig.STATIC),
                     this.getClass(),
-                    images);
+                    js);
 
             String lib = concat(TEMPLATE_BASE_PACKAGE, CODE_GENERATE_FILE_PREFIX, SPACER, LAYUI_HTML_FILE_PREFIX, "/lib");
             IOTools.loadRecourseFromJarByFolder(

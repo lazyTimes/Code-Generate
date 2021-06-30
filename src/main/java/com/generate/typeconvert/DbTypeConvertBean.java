@@ -16,9 +16,6 @@ public class DbTypeConvertBean implements DbTypeConvert {
     @Override
     public Map<String, String> getTypeMapping(String databaseType) {
         DbEnum enumOrNullByName = DbEnum.getEnumOrNullByName(databaseType);
-        if (Objects.isNull(enumOrNullByName)) {
-            return Collections.emptyMap();
-        }
         if (enumOrNullByName == DbEnum.POSTGRESQL) {
             return Postgresql.getPostgresqlTypeMapping();
         }
@@ -43,7 +40,7 @@ public class DbTypeConvertBean implements DbTypeConvert {
             MYSQL_TYPE_MAPPING.put("year", "Date");
             MYSQL_TYPE_MAPPING.put("blob", "String");
             MYSQL_TYPE_MAPPING.put("date", "Date");
-            MYSQL_TYPE_MAPPING.put("bigint", "Long");
+            MYSQL_TYPE_MAPPING.put("bigint", "Integer");
             MYSQL_TYPE_MAPPING.put("decimal", "BigDecimal");
             MYSQL_TYPE_MAPPING.put("double", "Double");
             MYSQL_TYPE_MAPPING.put("float", "Float");

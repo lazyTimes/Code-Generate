@@ -103,7 +103,7 @@ public class DataBaseUtil {
 
     private static void processTableInfo(String databaseType, ResultSet tableResult, List<FieldInfo> fieldList) throws SQLException {
         GENERATE_CONTEXT.genGeneratorProcessor(databaseType)
-                .processTableInfo(tableResult, fieldList);
+                .processTableInfo(databaseType, tableResult, fieldList);
     }
 
     /***

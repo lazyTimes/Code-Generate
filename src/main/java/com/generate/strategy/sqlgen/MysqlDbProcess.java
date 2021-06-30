@@ -36,11 +36,11 @@ public class MysqlDbProcess implements DbProcessAble {
     }
 
     @Override
-    public void processTableInfo(ResultSet tableResult, List<FieldInfo> fieldList) throws SQLException {
+    public void processTableInfo(String databaseType, ResultSet tableResult, List<FieldInfo> fieldList) throws SQLException {
         while (tableResult.next()) {
             FieldInfo fieldInfo = new FieldInfo();
             fieldInfo.setColumnName(tableResult.getString(1));
-            fieldInfo.setFieldClass(TYPE_CONVERT_FACTORY.getTypeMapping(PropertiesConfig.getConfig().getDataBaseType()).get(tableResult.getString(2)));
+            fieldInfo.setFieldClass(TYPE_CONVERT_FACTORY.getTypeMapping(databaseType).get(tableResult.getString(2)));
             String fieldName = DbCheckUtils.underlineToCamelCaseAndReplaceDbFieldName(tableResult.getString(1));
             fieldInfo.setFieldName(fieldName);
             fieldInfo.setFieldComment(tableResult.getString(3));
