@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.generate.util
  * @Description : 和数据库相关的工具类，包含数据库关键字过滤方法

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.mysql.strategy
  * @Description : PostgreSql 数据库相关语句生成

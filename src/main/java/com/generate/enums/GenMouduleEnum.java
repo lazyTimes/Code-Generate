@@ -1,7 +1,7 @@
 package com.generate.enums;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.generate.enums
  * @Description : 系统支持生成模块enum

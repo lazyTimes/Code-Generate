@@ -1,7 +1,7 @@
 package com.generate.util;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.mysql.util
  * @Description : 格式化工具

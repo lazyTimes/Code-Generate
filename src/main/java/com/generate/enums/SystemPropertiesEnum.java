@@ -3,7 +3,7 @@ package com.generate.enums;
 import static com.generate.config.SystemConfig.MATCH_ALL_MARK;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.mysql.enums
  * @Description : 系统配置枚举常量。如果没有从对应配置读取到常量值，使用枚举默认值作为替代

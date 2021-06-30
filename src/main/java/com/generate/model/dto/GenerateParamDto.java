@@ -3,7 +3,7 @@ package com.generate.model.dto;
 import java.util.List;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.generate.model.dto
  * @Description : 生成sql参数配置对象

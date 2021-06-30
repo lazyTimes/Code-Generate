@@ -3,20 +3,15 @@ package com.generate.factory;
 import cn.hutool.core.collection.CollectionUtil;
 import com.generate.bean.ClassInfo;
 import com.generate.bean.ConfigurationInfo;
-import com.generate.bean.PropertiesConfig;
-import com.generate.engine.AbstractEngine;
+import com.generate.bean.GenerateConfigConvert;
 import com.generate.model.WebEngineConfig;
 import com.generate.util.DataBaseUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static com.generate.config.SystemConfig.MATCH_ALL_MARK;
 
@@ -43,11 +38,11 @@ public class ClassInfoFactory {
         List<ClassInfo> result = new ArrayList<>();
         try {
             // 获取配置项
-            List<String> tableNames = DataBaseUtil.getAllTableNames(databaseType);
+            List<String> tableNames = DataBaseUtil.getAllTableNames(configurationInfo);
             for (String tableName : tableNames) {
                 // 仅加载 *; 配置项 或者 include包含项才进行处理
                 if (MATCH_ALL_MARK.equals(configurationInfo.getInclude()) || configurationInfo.getIncludeMap().containsKey(tableName)) {
-                    ClassInfo classInfo = DataBaseUtil.parseClassInfo(databaseType, tableName);
+                    ClassInfo classInfo = DataBaseUtil.parseClassInfo(configurationInfo, tableName);
                     result.add(classInfo);
                 }
             }
@@ -71,13 +66,15 @@ public class ClassInfoFactory {
         }
         List<ClassInfo> result = new ArrayList<>();
         try {
+            ConfigurationInfo configurationInfo = GenerateConfigConvert.convertConfigInfo(webEngineConfig);
             List<WebEngineConfig.WebGenerateParam> webGenerateParams = webEngineConfig.getWebGenerateParams();
             // 获取配置项
-            List<String> tableNames = DataBaseUtil.getAllTableNames(databaseType);
+            List<String> tableNames = DataBaseUtil.getAllTableNames(configurationInfo);
             if (MATCH_ALL_MARK.equals(webEngineConfig.getInclude())) {
                 logger.warn("匹配到 *; 参数，默认为所有表生成代码");
                 for (String tableName : tableNames) {
-                    ClassInfo classInfo = DataBaseUtil.parseClassInfo(databaseType, tableName);
+                    // TODO 如果为全部的表，需要修改默认的读取方式
+                    ClassInfo classInfo = DataBaseUtil.parseClassInfo(configurationInfo, tableName);
                     result.add(classInfo);
                 }
                 return result;
@@ -86,7 +83,7 @@ public class ClassInfoFactory {
             for (WebEngineConfig.WebGenerateParam webGenerateParam : webGenerateParams) {
                 for (String tableName : tableNames) {
                     if (tableName.equals(webGenerateParam.getTableName())) {
-                        ClassInfo classInfo = DataBaseUtil.parseClassInfo(databaseType, tableName);
+                        ClassInfo classInfo = DataBaseUtil.parseClassInfo(configurationInfo, tableName);
                         classInfo.setQueryFields(webGenerateParam.getQueryField());
                         classInfo.setFields(webGenerateParam.getFields());
                         classInfo.setTemplate(webEngineConfig.getTemplate());

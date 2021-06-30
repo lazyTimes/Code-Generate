@@ -1,7 +1,7 @@
 package com.generate.controller;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.generate.controller
  * @Description : 定制化代码生成器接口规范

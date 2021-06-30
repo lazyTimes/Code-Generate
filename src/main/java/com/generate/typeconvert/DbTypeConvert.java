@@ -3,7 +3,7 @@ package com.generate.typeconvert;
 import java.util.Map;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.generate.typeconvert
  * @Description : 数据库类型转化接口规范

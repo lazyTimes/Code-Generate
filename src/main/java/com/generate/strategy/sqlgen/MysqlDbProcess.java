@@ -12,7 +12,7 @@ import java.text.MessageFormat;
 import java.util.List;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.mysql.strategy
  * @Description : 允许进行mysql的语句构建
@@ -26,13 +26,13 @@ public class MysqlDbProcess implements DbProcessAble {
     public String genAllTableInfoSql(String... params) {
         return MessageFormat.format("select column_name,data_type,column_comment,numeric_precision," +
                 "numeric_scale,character_maximum_length,is_nullable nullable from information_schema.columns " +
-                "where table_name = \"{0}\" and table_schema = \"{1}\"", params[0], PropertiesConfig.getConfig().getDataBase());
+                "where table_name = \"{0}\" and table_schema = \"{1}\"", params[0], params[1]);
     }
 
     @Override
     public String genAllTables(String... params) {
         return MessageFormat.format("select table_name from information_schema.tables where table_schema=\"{0}\" and table_type=\"{1}\";",
-                PropertiesConfig.getConfig().getDataBase(), "base table");
+                params[0], "base table");
     }
 
     @Override

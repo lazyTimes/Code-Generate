@@ -16,12 +16,10 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.generate.config.SystemConfig.*;
-import static com.generate.config.SystemConfig.FreeMarkerFtlFileConfig.API_RESULT;
-import static com.generate.config.SystemConfig.FreeMarkerFtlFileConfig.CONTROLLER;
 import static com.generate.util.FormatUtil.concat;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.generate.engine.impl
  * @Description : 设置为web获取的形式

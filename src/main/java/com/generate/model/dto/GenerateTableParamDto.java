@@ -1,7 +1,7 @@
 package com.generate.model.dto;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.generate.model.dto
  * @Description : 构建表的参数dto

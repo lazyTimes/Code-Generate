@@ -10,7 +10,7 @@ import java.util.Locale;
 import static com.generate.config.SystemConfig.TEMPLATE_BASE_PACKAGE;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.generate.config
  * @Description : freemarker配置加载器

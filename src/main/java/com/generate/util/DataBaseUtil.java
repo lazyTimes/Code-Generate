@@ -1,11 +1,11 @@
 package com.generate.util;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.fastjson.JSON;
 import com.generate.bean.ClassInfo;
 import com.generate.bean.ConfigurationInfo;
 import com.generate.bean.FieldInfo;
 import com.generate.bean.PropertiesConfig;
-import com.generate.model.WebEngineConfig;
 import com.generate.strategy.sqlgen.GenerateContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,23 +45,20 @@ public class DataBaseUtil {
      * @return
      * @throws Exception
      */
-    private static Connection produceConnection() throws Exception {
-        ConfigurationInfo config = PropertiesConfig.getConfig();
+    private static Connection produceConnection(ConfigurationInfo config) throws Exception {
         String url = String.format("jdbc:%s://%s:%s/%s?characterEncoding=%s", config.getDataBaseType(), config.getIp(), config.getPort(), config.getDataBase(), config.getEncoding());
         return DriverManager.getConnection(url, config.getLoginName(), config.getPassWord());
     }
 
-    /***
-     * 获取数据库连接,双重校验保证线程安全
-     */
-    public static Connection getConnection() {
+    public static Connection getConnection(ConfigurationInfo config) {
         try {
             if (null == conn) {
                 synchronized (DataBaseUtil.class) {
                     if (null == conn) {
                         long start = System.currentTimeMillis();
-                        conn = produceConnection();
-                        logger.info("Connection is ready. consume time is: " + (System.currentTimeMillis() - start) + "ms");
+                        logger.info("数据库连接配置为：{}", JSON.toJSONString(config));
+                        conn = produceConnection(config);
+                        logger.info("数据库连接成功.耗时计算: " + (System.currentTimeMillis() - start) + "ms");
                     }
                 }
             }
@@ -75,10 +72,11 @@ public class DataBaseUtil {
      * 根据指定库获取单表相关参数
      * @param tableName   表名
      */
-    public static ClassInfo parseClassInfo(String databaseType, String tableName) throws SQLException {
+    public static ClassInfo parseClassInfo(ConfigurationInfo config, String tableName) throws SQLException {
         // tableSql
-        String tableInfoSql = GENERATE_CONTEXT.genGeneratorProcessor(databaseType).genAllTableInfoSql(tableName);
-        Statement statement = DataBaseUtil.getConnection().createStatement();
+        String tableInfoSql = GENERATE_CONTEXT.genGeneratorProcessor(config.getDataBaseType()).genAllTableInfoSql(tableName, config.getDataBase());
+        logger.info("根据指定库获取单表相关参数：{}", tableInfoSql);
+        Statement statement = DataBaseUtil.getConnection(config).createStatement();
         ResultSet tableResult = statement.executeQuery(tableInfoSql);
         // 构建ClassInfo信息
         ClassInfo classInfo = new ClassInfo();
@@ -90,7 +88,7 @@ public class DataBaseUtil {
         classInfo.setClassComment(className);
         List<FieldInfo> fieldList = new ArrayList<>();
         // 1 column_name, 2 data_type 3 column_comment
-        processTableInfo(databaseType, tableResult, fieldList);
+        processTableInfo(config.getDataBaseType(), tableResult, fieldList);
         classInfo.setFieldList(fieldList);
         // 设置主键字段
         if (CollectionUtil.isEmpty(fieldList)) {
@@ -111,12 +109,13 @@ public class DataBaseUtil {
     /***
      * 根据指定库获取所有表名
      */
-    public static List<String> getAllTableNames(String databaseType) throws SQLException {
+    public static List<String> getAllTableNames(ConfigurationInfo config) throws SQLException {
         // result
         List<String> result = new ArrayList<>();
         // sql
-        String sql = GENERATE_CONTEXT.genGeneratorProcessor(databaseType).genAllTables();
-        Statement statement = DataBaseUtil.getConnection().createStatement();
+        String sql = GENERATE_CONTEXT.genGeneratorProcessor(config.getDataBaseType()).genAllTables(config.getDataBase());
+        logger.info("获取指定库所有表名sql：{}", sql);
+        Statement statement = DataBaseUtil.getConnection(config).createStatement();
         ResultSet rs = statement.executeQuery(sql);
         while (rs.next()) {
             result.add(rs.getString(1));

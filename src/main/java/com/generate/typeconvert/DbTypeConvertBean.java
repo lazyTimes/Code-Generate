@@ -5,7 +5,7 @@ import com.generate.enums.DbEnum;
 import java.util.*;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.generate.typeconvert
  * @Description : postgresql 数据库类型转化map

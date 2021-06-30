@@ -3,7 +3,7 @@ package com.generate.config;
 import java.io.File;
 
 /**
- * @author zhaoxudong
+ * @author zxd
  * @version v1.0.0
  * @Package : com.mysql.config
  * @Description : 系统配置类
