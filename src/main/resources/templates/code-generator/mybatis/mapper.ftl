@@ -33,7 +33,7 @@ public interface ${classInfo.className}Mapper {
     /**
      * [删除]
      **/
-    int delete(Object key);
+    int deleteById(Object key);
 
     /**
      * [批量删除]
