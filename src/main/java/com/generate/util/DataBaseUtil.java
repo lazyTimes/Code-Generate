@@ -46,7 +46,8 @@ public class DataBaseUtil {
      * @throws Exception
      */
     private static Connection produceConnection(ConfigurationInfo config) throws Exception {
-        String url = String.format("jdbc:%s://%s:%s/%s?characterEncoding=%s", config.getDataBaseType(), config.getIp(), config.getPort(), config.getDataBase(), config.getEncoding());
+        String url = String.format("jdbc:%s://%s:%s/%s?characterEncoding=%s&useSSL=false&allowPublicKeyRetrieval=true", config.getDataBaseType(), config.getIp(), config.getPort(), config.getDataBase(), config.getEncoding());
+        logger.info("建立数据连接，连接配置为：{}", url);
         return DriverManager.getConnection(url, config.getLoginName(), config.getPassWord());
     }
 

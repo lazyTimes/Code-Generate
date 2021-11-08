@@ -1,5 +1,6 @@
 package com.generate.factory;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.generate.bean.ConfigurationInfo;
 import com.generate.bean.PropertiesConfig;
@@ -55,7 +56,7 @@ public class PropertiesFactory {
         // FastJson 构造对象
         JSONObject json = new JSONObject();
         loadBySystemEnum(prop, json);
-        ConfigurationInfo configurationInfo = json.toJavaObject(ConfigurationInfo.class);
+        ConfigurationInfo configurationInfo = JSON.parseObject(json.toJSONString(), ConfigurationInfo.class) ;
         configurationInfo.setIncludeMap(parseInclude(configurationInfo.getInclude()));
         configurationInfo.setCustomHandleIncludeMap(parseInclude(configurationInfo.getCustomHandleInclude()));
         // 解析项目目录地址
@@ -63,7 +64,7 @@ public class PropertiesFactory {
         configurationInfo.setProjectPath(projectPath);
         // 共有环境变量设置参数
         PropertiesConfig.setConfig(configurationInfo);
-        logger.info("Properties load Successful, Msg is: " + json);
+        logger.info("Properties load Successful, Msg is: \n" + json);
     }
 
     /**

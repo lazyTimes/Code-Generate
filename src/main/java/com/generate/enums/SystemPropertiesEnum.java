@@ -17,7 +17,7 @@ public enum SystemPropertiesEnum {
     PORT("port", "3306"),
     ENCODING("encoding", "UTF-8"),
     LOGIN_NAME("loginName", "root"),
-    PASSWORD("password", "SinoPay2020_"),
+    PASSWORD("passWord", "SinoPay2020_"),
     DATABASE("dataBase", ""),
     INCLUDE_TABLES("include", MATCH_ALL_MARK),
     PROJECT_NAME("projectName", "Demo"),
